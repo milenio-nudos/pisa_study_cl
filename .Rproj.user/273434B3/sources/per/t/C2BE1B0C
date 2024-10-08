@@ -1,26 +1,26 @@
 {
-    "id": "AC90A696",
+    "id": "C2BE1B0C",
     "path": "C:/Users/ismae/Desktop/pisa_study_cl/proc/analisis.R",
     "project_path": "proc/analisis.R",
     "type": "r_source",
-    "hash": "3890373680",
+    "hash": "6446906",
     "contents": "",
     "dirty": false,
-    "created": 1728337703652.0,
+    "created": 1728339583783.0,
     "source_on_save": false,
-    "relative_order": 2,
+    "relative_order": 1,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "23,0",
-        "scrollLine": "1"
+        "cursorPosition": "43,0",
+        "scrollLine": "21"
     },
     "folds": "",
-    "lastKnownWriteTime": 1728338124,
+    "lastKnownWriteTime": 1728399941,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1728338124210,
+    "last_content_update": 1728399941952,
     "read_only": false,
     "read_only_alternatives": []
 }

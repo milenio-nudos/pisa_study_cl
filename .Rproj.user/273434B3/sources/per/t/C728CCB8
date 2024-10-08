@@ -1,26 +1,26 @@
 {
-    "id": "763096A9",
+    "id": "C728CCB8",
     "path": "C:/Users/ismae/Desktop/pisa_study_cl/proc/datos_proc.R",
     "project_path": "proc/datos_proc.R",
     "type": "r_source",
-    "hash": "1635261793",
+    "hash": "1672721324",
     "contents": "",
     "dirty": false,
-    "created": 1728337367750.0,
+    "created": 1728394355906.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 2,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "6,21",
-        "scrollLine": "0"
+        "cursorPosition": "25,0",
+        "scrollLine": "4"
     },
     "folds": "",
-    "lastKnownWriteTime": 1728338084,
+    "lastKnownWriteTime": 1728394375,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1728338084111,
+    "last_content_update": 1728394375133,
     "read_only": false,
     "read_only_alternatives": []
 }

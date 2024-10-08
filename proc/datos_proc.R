@@ -24,5 +24,4 @@ datos_proc <- datos_proc %>%
 
 #Guardar base de datos procesada
 
-
 saveRDS(datos_proc, "input/data_proc/datos_proc.rds")

@@ -42,3 +42,14 @@ nice_table(stats.table, broom = "t.test",
            title = c("Tabla 2: análisis bivariado género y autoeficacia"),
            )
 
+#Regresión lineal
+
+LM1 <- lm(ICTEFFIC ~ ST004D01T, data = datos)
+
+sjPlot::tab_model(LM1,
+                  title = "Tabla 3",
+                  p.style = "stars",
+                  dv.labels = c("Regresión Lineal"),
+                  p.threshold = c(0.05, 0.01, 0.001),
+                  show.se = TRUE,
+                  digits =3)

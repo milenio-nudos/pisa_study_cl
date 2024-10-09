@@ -1,9 +1,9 @@
 {
     "id": "C728CCB8",
-    "path": "C:/Users/ismae/Desktop/pisa_study_cl/proc/datos_proc.R",
+    "path": "~/GitHub/pisa_study_cl/proc/datos_proc.R",
     "project_path": "proc/datos_proc.R",
     "type": "r_source",
-    "hash": "1672721324",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1728394355906.0,
@@ -13,7 +13,7 @@
         "source_window_id": "",
         "Source": "Source",
         "cursorPosition": "25,0",
-        "scrollLine": "4"
+        "scrollLine": "0"
     },
     "folds": "",
     "lastKnownWriteTime": 1728394375,

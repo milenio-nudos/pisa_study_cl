@@ -1,0 +1,139 @@
+---
+title: "PISA 2022"
+format: html
+editor: visual
+---
+
+```{r}
+pacman::p_load(rio, dplyr, sjPlot, skimr, effects, psych)
+```
+
+```{r}
+#| echo: false
+
+pisa22= rio::import("https://www.dropbox.com/s/ld5v7rqpn333xsn/CY08MSP_STU_QQQ.SAV?dl=1")
+
+table(pisa22$CNT)
+table(pisa22$CNTRYID)
+
+#pisacl=pisa22 %>%
+#  filter(CNTRYID==152)
+
+#table(pisacl$CNT)
+```
+
+
+# Análisis factorial exploratorio
+```{r}
+#names(pisacl)
+#table(pisacl$ST004D01T)
+
+#m1=lm(ICTEFFIC ~ sex, data=pisacl)
+#summary(m1)
+
+#table(pisacl$IC183Q01JA)
+
+
+eff= pisa22 %>%
+  select(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA, IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
+
+# Remover la opción 5 (no sé)
+eff[eff==5] <- NA
+
+table(eff$IC183Q01JA)
+
+#sjPlot::sjt.itemanalysis(eff)
+
+fac <- fa(r = eff, nfactors = 2, fm= "pa", rotate="promax")
+fac
+
+sjPlot::tab_fa(fac)
+```
+
+
+# Preparación de variables
+```{r}
+
+# Remover la opción 5
+pisa22$IC183Q01JA[pisa22$IC183Q01JA==5]<-NA
+pisa22$IC183Q02JA[pisa22$IC183Q02JA==5]<-NA
+pisa22$IC183Q03JA[pisa22$IC183Q03JA==5]<-NA
+pisa22$IC183Q04JA[pisa22$IC183Q04JA==5]<-NA
+pisa22$IC183Q05JA[pisa22$IC183Q05JA==5]<-NA
+pisa22$IC183Q07JA[pisa22$IC183Q07JA==5]<-NA
+pisa22$IC183Q08JA[pisa22$IC183Q08JA==5]<-NA
+pisa22$IC183Q09JA[pisa22$IC183Q09JA==5]<-NA
+pisa22$IC183Q10JA[pisa22$IC183Q10JA==5]<-NA
+pisa22$IC183Q12JA[pisa22$IC183Q12JA==5]<-NA
+pisa22$IC183Q13JA[pisa22$IC183Q13JA==5]<-NA
+pisa22$IC183Q14JA[pisa22$IC183Q14JA==5]<-NA
+pisa22$IC183Q15JA[pisa22$IC183Q15JA==5]<-NA
+pisa22$IC183Q16JA[pisa22$IC183Q16JA==5]<-NA
+
+## Generar indicadores relevantes
+    ## effspec: Autoeficacia digital específica
+    ## effgen: Autoeficacia digital general
+    ## sex : Variable sexo (1=Female 2=Male)
+pisa22=pisa22 %>%
+  rowwise()%>%
+  mutate(effspec=mean(c(IC183Q10JA, IC183Q14JA, IC183Q15JA, IC183Q16JA), na.rm=TRUE)) %>%
+  mutate(effgen=mean(c(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q12JA, IC183Q13JA), na.rm=TRUE)) %>%
+  mutate(sex=ST004D01T)
+
+#skim(pisa22$effspec)
+#skim(pisa22$effgen)
+```
+
+# Modelos globales: autoeficacia específica
+```{r}
+# Sex as factor
+pisa22$sexf=as.factor(pisa22$sex)
+
+#Multilevel model
+m1 <- lme4::lmer(effspec~ factor(sex) + (1 | CNTRYID), data = pisa22, REML=FALSE)
+summary(m1)
+
+m1a <- lme4::lmer(effspec~ factor(sex) + (sex | CNTRYID), data = pisa22, REML=FALSE)
+summary(m1a)
+
+anova(m1, m1a)
+# Efecto global es 0,14 de autoeficacia a favor de hombres.
+# Efecto es aleartorio entre países
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
+```
+
+# Modelos globales: autoeficacia general
+```{r}
+#Multilevel model
+m2 <- lme4::lmer(effgen~ factor(sex) + (1 | CNTRYID), data = pisa22, REML=FALSE)
+summary(m2)
+
+m2a <- lme4::lmer(effgen~ factor(sex) + (sex | CNTRYID), data = pisa22, REML=FALSE)
+summary(m2a)
+
+anova(m2, m2a)
+
+# Efecto global es -0,11 menos de autoeficacia para hombres.
+# Efecto es aleartorio entre países
+
+```
+
+```{r}
+tab_model(m1, m1a, m2, m2a)
+
+plot_model(m1a, type="re",
+    title = "Random model: Specific Self Efficacy")
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
+
+
+plot_model(m2a, type="re",
+    title = "Random model: General Self Efficacy")
+# Aunque es negativo en varios países (unos 26), efecto es neutro o positivo en otros.
+# Varibilidad es pequeña
+
+```
+
+
+
+
+

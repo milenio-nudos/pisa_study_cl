@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.52">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>PISA 2022</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="NUDOS_PISA_explora_files/libs/clipboard/clipboard.min.js"></script>
+<script src="NUDOS_PISA_explora_files/libs/quarto-html/quarto.js"></script>
+<script src="NUDOS_PISA_explora_files/libs/quarto-html/popper.min.js"></script>
+<script src="NUDOS_PISA_explora_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="NUDOS_PISA_explora_files/libs/quarto-html/anchor.min.js"></script>
+<link href="NUDOS_PISA_explora_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="NUDOS_PISA_explora_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="NUDOS_PISA_explora_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="NUDOS_PISA_explora_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="NUDOS_PISA_explora_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">PISA 2022</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(rio, dplyr, sjPlot, skimr, effects, psych)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  ALB   ARE   ARG   AUS   AUT   BEL   BGR   BRA   BRN   CAN   CHE   CHL   COL 
+ 6129 24600 12111 13437  6151  8286  6107 10798  5576 23073  6829  6488  7804 
+  CRI   CZE   DEU   DNK   DOM   ESP   EST   FIN   FRA   GBR   GEO   GRC   GTM 
+ 6113  8460  6116  6200  6868 30800  6392 10239  6770 12972  6583  6403  5190 
+  HKG   HRV   HUN   IDN   IRL   ISL   ISR   ITA   JAM   JOR   JPN   KAZ   KHM 
+ 5907  6135  6198 13439  5569  3360  6251 10552  3873  7799  5760 19769  5279 
+  KOR   KSV   LTU   LVA   MAC   MAR   MDA   MEX   MKD   MLT   MNE   MNG   MYS 
+ 6454  6027  7257  5373  4384  6867  6235  6288  6610  3127  5793  6999  7069 
+  NLD   NOR   NZL   PAN   PER   PHL   POL   PRT   PRY   PSE   QAT   QAZ   QUR 
+ 5046  6611  4682  4544  6968  7193  6011  6793  5084  7905  7676  7720  3876 
+  ROU   SAU   SGP   SLV   SRB   SVK   SVN   SWE   TAP   THA   TUR   URY   USA 
+ 7364  6928  6606  6705  6413  5824  6721  6072  5857  8495  7250  6618  4552 
+  UZB   VNM 
+ 7293  6068 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    8    31    32    36    40    56    76    96   100   116   124   152   158 
+ 6129  7720 12111 13437  6151  8286 10798  5576  6107  5279 23073  6488  5857 
+  170   188   191   203   208   214   222   233   246   250   268   275   276 
+ 7804  6113  6135  8460  6200  6868  6705  6392 10239  6770  6583  7905  6116 
+  300   320   344   348   352   360   372   376   380   383   388   392   398 
+ 6403  5190  5907  6198  3360 13439  5569  6251 10552  6027  3873  5760 19769 
+  400   410   428   440   446   458   470   484   496   498   499   504   528 
+ 7799  6454  5373  7257  4384  7069  3127  6288  6999  6235  5793  6867  5046 
+  554   578   591   600   604   608   616   620   634   642   682   688   702 
+ 4682  6611  4544  5084  6968  7193  6011  6793  7676  7364  6928  6413  6606 
+  703   704   705   724   752   756   764   784   792   807   826   840   858 
+ 5824  6068  6721 30800  6072  6829  8495 24600  7250  6610 12972  4552  6618 
+  860   901 
+ 7293  3876 </code></pre>
+</div>
+</div>
+<section id="análisis-factorial-exploratorio" class="level1">
+<h1>Análisis factorial exploratorio</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#names(pisacl)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#table(pisacl$ST004D01T)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#m1=lm(ICTEFFIC ~ sex, data=pisacl)</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#summary(m1)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#table(pisacl$IC183Q01JA)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>eff<span class="ot">=</span> pisa22 <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA, IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Remover la opción 5 (no sé)</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>eff[eff<span class="sc">==</span><span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(eff<span class="sc">$</span>IC183Q01JA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     1      2      3      4 
+ 25264  21719  70386 186971 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sjPlot::sjt.itemanalysis(eff)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fac <span class="ot">&lt;-</span> <span class="fu">fa</span>(<span class="at">r =</span> eff, <span class="at">nfactors =</span> <span class="dv">2</span>, <span class="at">fm=</span> <span class="st">"pa"</span>, <span class="at">rotate=</span><span class="st">"promax"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required namespace: GPArotation</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fac</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Factor Analysis using method =  pa
+Call: fa(r = eff, nfactors = 2, rotate = "promax", fm = "pa")
+Standardized loadings (pattern matrix) based upon correlation matrix
+             PA1   PA2   h2   u2 com
+IC183Q01JA  0.91 -0.21 0.66 0.34 1.1
+IC183Q02JA  0.83 -0.05 0.65 0.35 1.0
+IC183Q03JA  0.90 -0.14 0.70 0.30 1.0
+IC183Q04JA  0.85 -0.11 0.64 0.36 1.0
+IC183Q05JA  0.80  0.01 0.65 0.35 1.0
+IC183Q07JA  0.83 -0.05 0.65 0.35 1.0
+IC183Q08JA  0.61  0.23 0.57 0.43 1.3
+IC183Q09JA  0.63  0.19 0.58 0.42 1.2
+IC183Q10JA  0.29  0.53 0.53 0.47 1.5
+IC183Q12JA  0.61  0.21 0.56 0.44 1.2
+IC183Q13JA  0.54  0.31 0.58 0.42 1.6
+IC183Q14JA -0.15  0.90 0.68 0.32 1.1
+IC183Q15JA -0.09  0.92 0.76 0.24 1.0
+IC183Q16JA -0.09  0.89 0.71 0.29 1.0
+
+                       PA1  PA2
+SS loadings           5.93 2.98
+Proportion Var        0.42 0.21
+Cumulative Var        0.42 0.64
+Proportion Explained  0.67 0.33
+Cumulative Proportion 0.67 1.00
+
+ With factor correlations of 
+     PA1  PA2
+PA1 1.00 0.56
+PA2 0.56 1.00
+
+Mean item complexity =  1.2
+Test of the hypothesis that 2 factors are sufficient.
+
+df null model =  91  with the objective function =  10.01 with Chi Square =  6143285
+df of  the model are 64  and the objective function was  0.54 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.04 
+
+The harmonic n.obs is  287326 with the empirical chi square  51413.51  with prob &lt;  0 
+The total n.obs was  613744  with Likelihood Chi Square =  334407.1  with prob &lt;  0 
+
+Tucker Lewis Index of factoring reliability =  0.923
+RMSEA index =  0.092  and the 90 % confidence intervals are  0.092 0.093
+BIC =  333554.2
+Fit based upon off diagonal values = 1
+Measures of factor score adequacy             
+                                                   PA1  PA2
+Correlation of (regression) scores with factors   0.97 0.95
+Multiple R square of scores with factors          0.94 0.91
+Minimum correlation of possible factor scores     0.89 0.82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_fa</span>(fac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Cronbach's Alpha can only be calculated when having a data frame with each component / variable as column.</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Factor Analysis</caption>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" style="border-top: double black; padding: 0.2cm">&nbsp;</td>
+<td data-quarto-table-cell-role="th" style="border-top: double black; padding: 0.2cm">Factor 1</td>
+<td data-quarto-table-cell-role="th" style="border-top: double black; padding: 0.2cm">Factor 2</td>
+</tr>
+<tr class="even">
+<td style="border-top: 1px solid black">IC183Q01JA</td>
+<td style="text-align: center; padding: 0.2cm; border-top: 1px solid black;">0.91</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc; border-top: 1px solid black;">-0.21</td>
+</tr>
+<tr class="odd">
+<td>IC183Q02JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.83</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.05</td>
+</tr>
+<tr class="even">
+<td>IC183Q03JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.90</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.14</td>
+</tr>
+<tr class="odd">
+<td>IC183Q04JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.85</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.11</td>
+</tr>
+<tr class="even">
+<td>IC183Q05JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.80</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.01</td>
+</tr>
+<tr class="odd">
+<td>IC183Q07JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.83</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.05</td>
+</tr>
+<tr class="even">
+<td>IC183Q08JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.61</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.23</td>
+</tr>
+<tr class="odd">
+<td>IC183Q09JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.63</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.19</td>
+</tr>
+<tr class="even">
+<td>IC183Q10JA</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.29</td>
+<td style="text-align: center; padding: 0.2cm;">0.53</td>
+</tr>
+<tr class="odd">
+<td>IC183Q12JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.61</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.21</td>
+</tr>
+<tr class="even">
+<td>IC183Q13JA</td>
+<td style="text-align: center; padding: 0.2cm;">0.54</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">0.31</td>
+</tr>
+<tr class="odd">
+<td>IC183Q14JA</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.15</td>
+<td style="text-align: center; padding: 0.2cm;">0.90</td>
+</tr>
+<tr class="even">
+<td>IC183Q15JA</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.09</td>
+<td style="text-align: center; padding: 0.2cm;">0.92</td>
+</tr>
+<tr class="odd">
+<td>IC183Q16JA</td>
+<td style="text-align: center; padding: 0.2cm; color: #cccccc;">-0.09</td>
+<td style="text-align: center; padding: 0.2cm;">0.89</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="preparación-de-variables" class="level1">
+<h1>Preparación de variables</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remover la opción 5</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q01JA[pisa22<span class="sc">$</span>IC183Q01JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q02JA[pisa22<span class="sc">$</span>IC183Q02JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q03JA[pisa22<span class="sc">$</span>IC183Q03JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q04JA[pisa22<span class="sc">$</span>IC183Q04JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q05JA[pisa22<span class="sc">$</span>IC183Q05JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q07JA[pisa22<span class="sc">$</span>IC183Q07JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q08JA[pisa22<span class="sc">$</span>IC183Q08JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q09JA[pisa22<span class="sc">$</span>IC183Q09JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q10JA[pisa22<span class="sc">$</span>IC183Q10JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q12JA[pisa22<span class="sc">$</span>IC183Q12JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q13JA[pisa22<span class="sc">$</span>IC183Q13JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q14JA[pisa22<span class="sc">$</span>IC183Q14JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q15JA[pisa22<span class="sc">$</span>IC183Q15JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>IC183Q16JA[pisa22<span class="sc">$</span>IC183Q16JA<span class="sc">==</span><span class="dv">5</span>]<span class="ot">&lt;-</span><span class="cn">NA</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Generar indicadores relevantes</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="do">## effspec: Autoeficacia digital específica</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    <span class="do">## effgen: Autoeficacia digital general</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    <span class="do">## sex : Variable sexo (1=Female 2=Male)</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>pisa22<span class="ot">=</span>pisa22 <span class="sc">%&gt;%</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>()<span class="sc">%&gt;%</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">effspec=</span><span class="fu">mean</span>(<span class="fu">c</span>(IC183Q10JA, IC183Q14JA, IC183Q15JA, IC183Q16JA), <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">effgen=</span><span class="fu">mean</span>(<span class="fu">c</span>(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q12JA, IC183Q13JA), <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sex=</span>ST004D01T)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="co">#skim(pisa22$effspec)</span></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co">#skim(pisa22$effgen)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="modelos-globales-autoeficacia-específica" class="level1">
+<h1>Modelos globales: autoeficacia específica</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sex as factor</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pisa22<span class="sc">$</span>sexf<span class="ot">=</span><span class="fu">as.factor</span>(pisa22<span class="sc">$</span>sex)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Multilevel model</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(effspec<span class="sc">~</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> CNTRYID), <span class="at">data =</span> pisa22, <span class="at">REML=</span><span class="cn">FALSE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: effspec ~ factor(sex) + (1 | CNTRYID)
+   Data: pisa22
+
+      AIC       BIC    logLik  deviance  df.resid 
+ 806302.8  806345.4 -403147.4  806294.8    307421 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.4558 -0.7355  0.1004  0.7859  2.1575 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ CNTRYID  (Intercept) 0.0299   0.1729  
+ Residual             0.8057   0.8976  
+Number of obs: 307425, groups:  CNTRYID, 52
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)   2.64304    0.02410  109.67
+factor(sex)2  0.14625    0.00324   45.14
+
+Correlation of Fixed Effects:
+            (Intr)
+factor(sx)2 -0.067</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>m1a <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(effspec<span class="sc">~</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> (sex <span class="sc">|</span> CNTRYID), <span class="at">data =</span> pisa22, <span class="at">REML=</span><span class="cn">FALSE</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: effspec ~ factor(sex) + (sex | CNTRYID)
+   Data: pisa22
+
+      AIC       BIC    logLik  deviance  df.resid 
+ 805196.4  805260.2 -402592.2  805184.4    307419 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.4154 -0.7303  0.1036  0.7874  2.1675 
+
+Random effects:
+ Groups   Name        Variance Std.Dev. Corr 
+ CNTRYID  (Intercept) 0.08406  0.2899        
+          sex         0.01267  0.1126   -0.85
+ Residual             0.80241  0.8958        
+Number of obs: 307425, groups:  CNTRYID, 52
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)   2.64290    0.02834  93.252
+factor(sex)2  0.14498    0.01601   9.057
+
+Correlation of Fixed Effects:
+            (Intr)
+factor(sx)2 -0.648</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m1, m1a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: pisa22
+Models:
+m1: effspec ~ factor(sex) + (1 | CNTRYID)
+m1a: effspec ~ factor(sex) + (sex | CNTRYID)
+    npar    AIC    BIC  logLik deviance  Chisq Df Pr(&gt;Chisq)    
+m1     4 806303 806345 -403147   806295                         
+m1a    6 805196 805260 -402592   805184 1110.4  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto global es 0,14 de autoeficacia a favor de hombres.</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto es aleartorio entre países</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="modelos-globales-autoeficacia-general" class="level1">
+<h1>Modelos globales: autoeficacia general</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Multilevel model</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(effgen<span class="sc">~</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> CNTRYID), <span class="at">data =</span> pisa22, <span class="at">REML=</span><span class="cn">FALSE</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: effgen ~ factor(sex) + (1 | CNTRYID)
+   Data: pisa22
+
+      AIC       BIC    logLik  deviance  df.resid 
+ 679165.2  679207.9 -339578.6  679157.2    316689 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6831 -0.4998  0.1945  0.7605  1.7901 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ CNTRYID  (Intercept) 0.02766  0.1663  
+ Residual             0.49943  0.7067  
+Number of obs: 316693, groups:  CNTRYID, 52
+
+Fixed effects:
+              Estimate Std. Error t value
+(Intercept)   3.304490   0.023139  142.81
+factor(sex)2 -0.111097   0.002513  -44.21
+
+Correlation of Fixed Effects:
+            (Intr)
+factor(sx)2 -0.054</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m2a <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(effgen<span class="sc">~</span> <span class="fu">factor</span>(sex) <span class="sc">+</span> (sex <span class="sc">|</span> CNTRYID), <span class="at">data =</span> pisa22, <span class="at">REML=</span><span class="cn">FALSE</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear mixed model fit by maximum likelihood  ['lmerMod']
+Formula: effgen ~ factor(sex) + (sex | CNTRYID)
+   Data: pisa22
+
+      AIC       BIC    logLik  deviance  df.resid 
+ 678945.9  679009.9 -339467.0  678933.9    316687 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.6856 -0.5042  0.1967  0.7501  1.7863 
+
+Random effects:
+ Groups   Name        Variance Std.Dev. Corr 
+ CNTRYID  (Intercept) 0.024374 0.15612       
+          sex         0.002106 0.04589  -0.06
+ Residual             0.498929 0.70635       
+Number of obs: 316693, groups:  CNTRYID, 52
+
+Fixed effects:
+             Estimate Std. Error t value
+(Intercept)   3.30336    0.02227  148.34
+factor(sex)2 -0.10927    0.00692  -15.79
+
+Correlation of Fixed Effects:
+            (Intr)
+factor(sx)2 0.184 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m2, m2a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data: pisa22
+Models:
+m2: effgen ~ factor(sex) + (1 | CNTRYID)
+m2a: effgen ~ factor(sex) + (sex | CNTRYID)
+    npar    AIC    BIC  logLik deviance Chisq Df Pr(&gt;Chisq)    
+m2     4 679165 679208 -339579   679157                        
+m2a    6 678946 679010 -339467   678934 223.3  2  &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto global es -0,11 menos de autoeficacia para hombres.</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Efecto es aleartorio entre países</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tab_model</span>(m1, m1a, m2, m2a)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effspec</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effspec</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effgen</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effgen</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">p</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col7">p</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col8">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  col9">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  0">p</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  1">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  2">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  3">p</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.64</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.60&nbsp;–&nbsp;2.69</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.64</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.59&nbsp;–&nbsp;2.70</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">3.30</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">3.26&nbsp;–&nbsp;3.35</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0"><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">3.30</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">3.26&nbsp;–&nbsp;3.35</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3"><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">factor(sex)2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.15</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.14&nbsp;–&nbsp;0.15</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  "><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.14</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.11&nbsp;–&nbsp;0.18</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col7"><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col8">-0.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  col9">-0.12&nbsp;–&nbsp;-0.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  0"><strong>&lt;0.001</strong></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  1">-0.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  2">-0.12&nbsp;–&nbsp;-0.10</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  3"><strong>&lt;0.001</strong></td>
+</tr>
+<tr>
+<td colspan="13" style="font-weight:bold; text-align:left; padding-top:.8em;">Random Effects</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">σ<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.81</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.80</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.50</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.50</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">τ<sub>00</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.03 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.08 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.03 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.02 <sub>CNTRYID</sub></td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">τ<sub>11</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">&nbsp;</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.01 <sub>CNTRYID.sex</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">&nbsp;</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.00 <sub>CNTRYID.sex</sub></td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">ρ<sub>01</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">&nbsp;</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">-0.85 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">&nbsp;</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">-0.06 <sub>CNTRYID</sub></td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">ICC</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.04</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.09</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.05</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.05</td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">52 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">52 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">52 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">52 <sub>CNTRYID</sub></td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">307425</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">307425</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">316693</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">316693</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.006 / 0.042</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.006 / 0.100</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.006 / 0.058</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">0.006 / 0.052</td>
+</tr>
+
+</tbody></table>
+
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_model</span>(m1a, <span class="at">type=</span><span class="st">"re"</span>,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Random model: Specific Self Efficacy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="NUDOS_PISA_explora_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_model</span>(m2a, <span class="at">type=</span><span class="st">"re"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Random model: General Self Efficacy"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="NUDOS_PISA_explora_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aunque es negativo en varios países (unos 26), efecto es neutro o positivo en otros.</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Varibilidad es pequeña</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

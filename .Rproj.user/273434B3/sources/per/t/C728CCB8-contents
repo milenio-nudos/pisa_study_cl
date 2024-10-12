@@ -13,7 +13,6 @@ data <- readRDS("input/data_orig/datos_stu_chile.rds")
 
 #Seleccionar variables de interés
 
-
 datos_proc <- data %>%
   select(CNTSCHID, CNTSTUID, STRATUM, ST001D01T, ST004D01T, starts_with("ST250"), starts_with("ST254"), ST253Q01JA, starts_with("ST326"), starts_with("ST322"), ST337Q08JA, ST338Q08JA, starts_with("IC"))
 

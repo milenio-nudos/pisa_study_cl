@@ -31,4 +31,4 @@ Keywords: Information and Communication Technologies - ICT, PISA 2022, General a
 
 # Report
 
-[First exploration of Self-efficacy differences](https://milenio-nudos.github.io/pisa_study_cl/NUDOS_PISA_explora.html)
+[First exploration of Self-efficacy differences](https://milenio-nudos.github.io/pisa_study_cl/output/NUDOS_PISA_explora.html)

@@ -2,6 +2,7 @@
 
 This repository contains all the analyses and processing done by the NUDOS social line team on the OECD PISA database. The structure of the repository is as follows:
 
+``` 
 ├── input: Information needed to prepare processing, analysis, presentations and articles:
 | ├─── raw_data: Raw PISA databases, downloaded from the page (in some cases there are unavaliable due to the size of the database).
 │ ├─── proc_data: Databases processed by codes from the same repository.
@@ -15,6 +16,7 @@ This repository contains all the analyses and processing done by the NUDOS socia
 ├── output: Files originating from analysis codes.
 | ├─── presentations: Presentations for congresses, conferences, among others.
 | ├─── articles: Academic articles written in markdown.
+```
 
 Title: Gender differences in digital self-efficacy at school across 52 countries. 
 

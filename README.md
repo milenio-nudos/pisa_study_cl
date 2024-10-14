@@ -29,3 +29,6 @@ First, preliminary results show that it is possible to empirically distinguish t
 
 Keywords: Information and Communication Technologies - ICT, PISA 2022, General and specialised digital self-efficacy
 
+# Report
+
+[First exploration of Self-efficacy differences](https://milenio-nudos.github.io/pisa_study_cl/NUDOS_PISA_explora.html)

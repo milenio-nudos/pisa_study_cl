@@ -1,0 +1,29 @@
+# Análisis factorial y modelos lineales por país
+
+```{r}
+pacman::p_load(dplyr, haven)
+options(scipen = 999) 
+rm(list = ls()) 
+```
+
+```{r}
+pisa22ict <- readRDS("input/proc_data/pisa22ict.rds")
+```
+
+```{r}
+
+  modelo_effgen <- pisa22ict %>%
+    group_by(CNT) %>%
+    do(modelo = lm(effgen ~ sex, data = .))
+
+  modelo_effspec <- pisa22ict %>%
+    group_by(CNT) %>%
+    do(modelo = lm(effspec ~ sex, data = .))
+
+
+# Extraer modelos individuales
+models_effgen <- lapply(modelo_effgen$modelo, summary)
+models_effspec <- lapply(modelo_effspec$modelo, summary)
+
+
+```

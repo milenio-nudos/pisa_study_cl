@@ -1,0 +1,3 @@
+"0","pacman::p_load(dplyr, haven)"
+"0","options(scipen = 999) "
+"0","rm(list = ls()) "

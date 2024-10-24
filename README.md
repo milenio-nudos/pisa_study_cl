@@ -1,6 +1,6 @@
 # pisa_study_cl
 
-This repository contains all the analyses and processing done by the NUDOS social line team on the OECD PISA database. The structure of the repository is as follows:
+This repository contains all the analyses and processing done by the NUDOS social line team on the ICT questionnarie from the OECD PISA database. The structure of the repository is as follows:
 
 ``` 
 ├── input: Information needed to prepare processing, analysis, presentations and articles:

@@ -29,7 +29,7 @@ pisa22 <- readRDS("input/proc_data/STU_QQQ.rds")
 #Filtrar países que hayan aplicado ICT y seleccionar variables de interes
 pisa22_proc <- pisa22 %>%
   filter(Option_ICTQ == 1) %>%
-  select(CNT, CNTSCHID, CNTSTUID, ST001D01T, ST004D01T, starts_with("ST322"), ST337Q08JA, ST338Q08JA, starts_with("IC"))
+  select(CNT, CNTRYID, CNTSCHID, CNTSTUID, ST001D01T, ST004D01T, starts_with("ST322"), ST337Q08JA, ST338Q08JA, starts_with("IC"))
 
 #Elimiar respuesta no sabe
 pisa22_proc$IC183Q01JA[pisa22_proc$IC183Q01JA==5]<-NA

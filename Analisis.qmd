@@ -1,7 +1,7 @@
 # Análisis factorial y modelos lineales por país
 
 ```{r}
-pacman::p_load(dplyr, haven)
+pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters)
 options(scipen = 999) 
 rm(list = ls()) 
 ```
@@ -10,7 +10,51 @@ rm(list = ls())
 pisa22ict <- readRDS("input/proc_data/pisa22ict.rds")
 ```
 
+## Análisis factorial por país
+
 ```{r}
+
+#Datos para el análisis factorial
+
+eff_data <- pisa22ict %>%
+  select(CNT, IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, 
+         IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA, 
+         IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
+
+#Grouo by CNT (código país)
+resultados_factoriales <- eff_data %>%
+  group_by(CNT) %>%
+  group_split() %>%
+  map(~ fa(select(.x, -CNT), nfactors = 2, fm = "pa", rotate = "promax"))
+
+#Tabla con todos los resultados por país
+tabla_resultados <- map2_dfr(
+  resultados_factoriales,
+  unique(eff_data$CNT),
+  ~ tibble(
+    CNT = .y,
+    Variable = rownames(.x$loadings),
+    CargaFactor1 = .x$loadings[, 1],
+    CargaFactor2 = .x$loadings[, 2]
+  )
+)
+
+#Otra forma de visualizarlo (columnas son cada país)
+tabla_factor1 <- tabla_resultados %>%
+  select(CNT, Variable, CargaFactor1) %>%
+  pivot_wider(names_from = CNT, values_from = CargaFactor1)
+
+tabla_factor2 <- tabla_resultados %>%
+  select(CNT, Variable, CargaFactor2) %>%
+  pivot_wider(names_from = CNT, values_from = CargaFactor2)
+
+```
+
+## Modelos de regresión lineal por país
+
+```{r}
+
+#Modelos generales y específicos, group by código país
 
   modelo_effgen <- pisa22ict %>%
     group_by(CNT) %>%
@@ -20,10 +64,16 @@ pisa22ict <- readRDS("input/proc_data/pisa22ict.rds")
     group_by(CNT) %>%
     do(modelo = lm(effspec ~ sex, data = .))
 
-
 # Extraer modelos individuales
 models_effgen <- lapply(modelo_effgen$modelo, summary)
 models_effspec <- lapply(modelo_effspec$modelo, summary)
+
+modelo_effgen[[1]] #Orden de países para poder ver que número es cada país
+
+models_effgen[[1]] #Modelos Albania
+models_effspec[[1]] 
+models_effgen[[10]] #Modelos Chile
+models_effspec[[10]]
 
 
 ```

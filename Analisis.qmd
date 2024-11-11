@@ -1,7 +1,13 @@
+---
+title: "PISA 2022"
+format: html
+editor: visual
+---
+
 # Análisis factorial y modelos lineales por país
 
 ```{r}
-pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters)
+pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters, table1, beeswarm)
 options(scipen = 999) 
 rm(list = ls()) 
 ```
@@ -14,40 +20,36 @@ pisa22ict <- readRDS("input/proc_data/pisa22ict.rds")
 
 ```{r}
 
-#Datos para el análisis factorial
+#Datos para el análiis factorial
 
 eff_data <- pisa22ict %>%
   select(CNT, IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA, 
          IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA, 
          IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
 
-#Grouo by CNT (código país)
+# Group by CNT (código país)
 resultados_factoriales <- eff_data %>%
   group_by(CNT) %>%
   group_split() %>%
   map(~ fa(select(.x, -CNT), nfactors = 2, fm = "pa", rotate = "promax"))
 
-#Tabla con todos los resultados por país
+# Tabla con todos los resultados por país
+
 tabla_resultados <- map2_dfr(
   resultados_factoriales,
   unique(eff_data$CNT),
   ~ tibble(
-    CNT = .y,
     Variable = rownames(.x$loadings),
+    CNT = .y,
     CargaFactor1 = .x$loadings[, 1],
     CargaFactor2 = .x$loadings[, 2]
   )
-)
+) %>%
+  arrange(Variable)
 
-#Otra forma de visualizarlo (columnas son cada país)
-tabla_factor1 <- tabla_resultados %>%
-  select(CNT, Variable, CargaFactor1) %>%
-  pivot_wider(names_from = CNT, values_from = CargaFactor1)
-
-tabla_factor2 <- tabla_resultados %>%
-  select(CNT, Variable, CargaFactor2) %>%
-  pivot_wider(names_from = CNT, values_from = CargaFactor2)
-
+view_df(tabla_resultados)
+View(tabla_resultados)
+tabla_resultados
 ```
 
 ## Modelos de regresión lineal por país
@@ -68,12 +70,141 @@ tabla_factor2 <- tabla_resultados %>%
 models_effgen <- lapply(modelo_effgen$modelo, summary)
 models_effspec <- lapply(modelo_effspec$modelo, summary)
 
-modelo_effgen[[1]] #Orden de países para poder ver que número es cada país
+unique(pisa22ict$CNT)
 
 models_effgen[[1]] #Modelos Albania
 models_effspec[[1]] 
 models_effgen[[10]] #Modelos Chile
 models_effspec[[10]]
 
+# Crear un dataframe con las betas de los modelos
+
+coef_data1 <- data.frame(
+  coef_gen = sapply(1:52, function(i) models_effgen[[i]][["coefficients"]][[2]])
+)
+
+coef_data2 <- data.frame(
+  coef_spec = sapply(1:52, function(i) models_effspec[[i]][["coefficients"]][[2]])
+)
+
+# Creamos variable de si el país está en la OCDE
+
+aux <- c("no", "no", "si", "si", "si", "no", "no", "no", "si", "no", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "si", "si", "si", "si", "no", "no", "si", "no", "si", "no", "no", "no", "no", "no", "si", "no", "no", "no", "si", "si", "si", "si", "si", "si", "si", "no", "si", "si", "no")
+
+df_aux <- data.frame(OCDE = aux) # Convertimos en data.freame
+
+coef_data1 <- cbind(coef_data1, df_aux) # Unimos al data frame de las betas
+
+coef_data2 <- cbind(coef_data2, df_aux) # Unimos al data frame de las betas
+
+rm(df_aux, aux) # Removemos objetos auxiliares
+
 
 ```
+
+## Análisis descriptivo y visualización de estimadores por país
+
+```{r}
+
+pvalue <- function(x, ...) {
+    # Construct vectors of data y, and groups (strata) g
+    y <- unlist(x)
+    g <- factor(rep(1:length(x), times=sapply(x, length)))
+    if (is.numeric(y)) {
+        # For numeric variables, perform a standard 2-sample t-test
+        p <- t.test(y ~ g)$p.value
+    } else {
+        # For categorical variables, perform a chi-squared test of independence
+        p <- chisq.test(table(y, g))$p.value
+    }
+    # Format the p-value, using an HTML entity for the less-than sign.
+    # The initial empty string places the output on the line below the variable label.
+    c("", sub("<", "&lt;", format.pval(p, digits=3, eps=0.001)))
+}
+
+# Descrpitivos de los estimadores por país
+
+df_aux <- cbind(coef_data1, coef_data2)
+
+tabla_descr <- table1::table1(~ coef_gen + coef_spec + OCDE, data=df_aux, topclass="Rtable1-zebra", caption = "Tabla 1: Estadísticos Descriptivos Estimadores",
+               footnote = "Fuente: Elaboración propia con datos de PISA.")
+
+tabla_descr2 <- table1::table1(~ coef_gen + coef_spec | OCDE, data=df_aux, topclass="Rtable1-zebra", overall=FALSE, extra.col=list(`P-value`=pvalue), caption = "Tabla 2: Comparación OCDE y no OCDE",
+               footnote = "Fuente: Elaboración propia con datos de PISA.")
+
+```
+
+### Tabla descriptivos estimadores
+
+```{r}
+
+tabla_descr #La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien
+
+```
+
+Desviación estándar en los estimadores de autoeficacia específica es mucho mayor.
+
+### Tabla comparativa países OCDE y no OCDE
+
+```{r}
+
+tabla_descr2 #La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien
+
+```
+
+Podemos ver una diferencia no significativa entre países de la OCDE en el estimador de efecto hombre en la autoeficacia digital general. En la específica si hay una diferencia significativa (p\<0.05), y esta es de 0,79 de efecto. O sea, los datos señalan que el ser hombre en países de la OCDE tendría un mayor efecto en la autoeficacia específica que en los países que no son de la OCDE. Se me ocurre que esto se puede deber a un mayor acceso de los jóvenes interesados en aprender competencias complejas a las tecnologías necesarias, que en los países no OCDE no encuentran tales recursos. También se puede instigar más en la composición de los datos bajo estos grupos, ya que se puede deber simplemente a la mayor desviación estándar de los países OCDE.
+
+```{r}
+
+# Visualización de las distribuciones de las betas
+
+beeswarm::beeswarm(coef_data1$coef,
+                   horizontal=TRUE,
+                   method="swarm",
+                   col=c("#fe3057"),
+                   cex=1,
+                   pch=18,
+                   main= "Distribución de Coeficientes Autoeficacia general",
+                   )
+
+
+beeswarm::beeswarm(coef_data2$coef,
+                   horizontal=TRUE,
+                   method="swarm",
+                   col=c("#fe3057"),
+                   cex=1,
+                   pch=18,
+                   main= "Distribución de Coeficientes Autoeficacia Específica",
+                   )
+
+
+# Visualización de las distribuciones de las betas, según país OCDE o no
+
+beeswarm::beeswarm(coef_data1$coef ~ coef_data1$OCDE,
+                   horizontal=TRUE,
+                   method="swarm",
+                   col=c("#fe3057", "#5f5758"),
+                   cex=1,
+                   pch=18,
+                   main= "Distribución de Coeficientes Autoeficacia general",
+                   )
+
+
+beeswarm::beeswarm(coef_data2$coef ~ coef_data2$OCDE,
+                   horizontal=TRUE,
+                   method="swarm",
+                   col=c("#fe3057", "#5f5758"),
+                   cex=1,
+                   pch=18,
+                   main= "Distribución de Coeficientes Autoeficacia Específica",
+                   )
+
+```
+
+-   Dato atípico es croacia (en países no OCDE) lo cual hace sentido con el descubrimiento
+
+<!-- -->
+
+-   Se debería investigar en los países ocde los casos outsider hacia la izquierda
+
+-   

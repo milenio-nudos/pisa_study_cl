@@ -43,14 +43,22 @@ tabla_resultados <- map2_dfr(
     CNT = .y,
     CargaFactor1 = .x$loadings[, 1],
     CargaFactor2 = .x$loadings[, 2]
-  )
-) %>%
+    )
+  ) %>%
   arrange(Variable)
 
+tabla_resultados <- tabla_resultados %>% 
+  mutate(Factor1 = if_else(CargaFactor1 >0.5, "TRUE", "FALSE")
+) %>% 
+  mutate(Factor2 = if_else(CargaFactor2 >0.5, "TRUE", "FALSE"))
+  
 view_df(tabla_resultados)
 View(tabla_resultados)
 tabla_resultados
+
 ```
+
+En general la tendencia vista en el análisis factorial explotarorio global se repite. Sin embargo, llama la atención Corea, que invierte las dimensiones en la mayoria de las preguntas del índice (creo que es solo una la que si sigue la tendencia global). La pregunta Q08 tiene varios países con las dimensiones invertidas (Albania, Hong Kong, Jordania, etc.). Sin embargo muchos de estos se acercan a 0.5. Debemos establecer un criterio mínimo de magnitud de presencia del factor para descartar países o variables. La Q09 se comporta bastante similar a la Q08, revisar ambos casos. La Q10 parece ser del factor 2 sin embargo con una carga más baja que otras variables.
 
 ## Modelos de regresión lineal por país
 
@@ -206,3 +214,5 @@ beeswarm::beeswarm(coef_data2$coef_spec ~ coef_data2$OCDE,
 -   Propongo instigar en los casos límites de ambos grupos
 
 -   En los países OCDE, Chile es el que presenta menor diferencia en autoeficacia específica, lo cual se alinearía con la hipótesis presentada
+
+-   En la autoeficacia general, la beta con menor efecto (en los paises no OCDE) es Argentina

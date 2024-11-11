@@ -136,11 +136,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">CNT =</span> .y,</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">CargaFactor1 =</span> .x<span class="sc">$</span>loadings[, <span class="dv">1</span>],</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">CargaFactor2 =</span> .x<span class="sc">$</span>loadings[, <span class="dv">2</span>]</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Variable)</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">view_df</span>(tabla_resultados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>tabla_resultados <span class="ot">&lt;-</span> tabla_resultados <span class="sc">%&gt;%</span> </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Factor1 =</span> <span class="fu">if_else</span>(CargaFactor1 <span class="sc">&gt;</span><span class="fl">0.5</span>, <span class="st">"TRUE"</span>, <span class="st">"FALSE"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Factor2 =</span> <span class="fu">if_else</span>(CargaFactor2 <span class="sc">&gt;</span><span class="fl">0.5</span>, <span class="st">"TRUE"</span>, <span class="st">"FALSE"</span>))</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">view_df</span>(tabla_resultados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <caption>Data frame: tabla_resultados</caption>
@@ -200,28 +205,43 @@ CZE<br>
 <td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;"></td>
 <td colspan="2" style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;"><em>range: -0.3-1.0</em></td>
 </tr>
+<tr class="even">
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">5</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">Factor1</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;"></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;"></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top;">&lt;output omitted&gt;</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;">6</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;">Factor2</td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;"></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;"></td>
+<td style="text-align: left; padding: 0.2cm; vertical-align: top; background-color: #eeeeee;">&lt;output omitted&gt;</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(tabla_resultados)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tabla_resultados</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 728 × 4
-   Variable   CNT                     CargaFactor1 CargaFactor2
-   &lt;chr&gt;      &lt;chr+lbl&gt;                      &lt;dbl&gt;        &lt;dbl&gt;
- 1 IC183Q01JA ALB [Albania]                  0.921      -0.0975
- 2 IC183Q01JA ARG [Argentina]                0.896      -0.210 
- 3 IC183Q01JA AUS [Australia]                0.910      -0.193 
- 4 IC183Q01JA AUT [Austria]                  0.860      -0.207 
- 5 IC183Q01JA BEL [Belgium]                  0.852      -0.176 
- 6 IC183Q01JA BRA [Brazil]                   0.968      -0.244 
- 7 IC183Q01JA BRN [Brunei Darussalam]        0.937      -0.188 
- 8 IC183Q01JA BGR [Bulgaria]                 0.817      -0.185 
- 9 IC183Q01JA CHL [Chile]                    0.869      -0.183 
-10 IC183Q01JA TAP [Chinese Taipei]           0.897      -0.189 
+<pre><code># A tibble: 728 × 6
+   Variable   CNT                     CargaFactor1 CargaFactor2 Factor1 Factor2
+   &lt;chr&gt;      &lt;chr+lbl&gt;                      &lt;dbl&gt;        &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
+ 1 IC183Q01JA ALB [Albania]                  0.921      -0.0975 TRUE    FALSE  
+ 2 IC183Q01JA ARG [Argentina]                0.896      -0.210  TRUE    FALSE  
+ 3 IC183Q01JA AUS [Australia]                0.910      -0.193  TRUE    FALSE  
+ 4 IC183Q01JA AUT [Austria]                  0.860      -0.207  TRUE    FALSE  
+ 5 IC183Q01JA BEL [Belgium]                  0.852      -0.176  TRUE    FALSE  
+ 6 IC183Q01JA BRA [Brazil]                   0.968      -0.244  TRUE    FALSE  
+ 7 IC183Q01JA BRN [Brunei Darussalam]        0.937      -0.188  TRUE    FALSE  
+ 8 IC183Q01JA BGR [Bulgaria]                 0.817      -0.185  TRUE    FALSE  
+ 9 IC183Q01JA CHL [Chile]                    0.869      -0.183  TRUE    FALSE  
+10 IC183Q01JA TAP [Chinese Taipei]           0.897      -0.189  TRUE    FALSE  
 # ℹ 718 more rows</code></pre>
 </div>
 </div>
+<p>En general la tendencia vista en el análisis factorial explotarorio global se repite. Sin embargo, llama la atención Corea, que invierte las dimensiones en la mayoria de las preguntas del índice (creo que es solo una la que si sigue la tendencia global). La pregunta Q08 tiene varios países con las dimensiones invertidas (Albania, Hong Kong, Jordania, etc.). Sin embargo muchos de estos se acercan a 0.5. Debemos establecer un criterio mínimo de magnitud de presencia del factor para descartar países o variables. La Q09 se comporta bastante similar a la Q08, revisar ambos casos. La Q10 parece ser del factor 2 sin embargo con una carga más baja que otras variables.</p>
 </section>
 <section id="modelos-de-regresión-lineal-por-país" class="level2">
 <h2 class="anchored" data-anchor-id="modelos-de-regresión-lineal-por-país">Modelos de regresión lineal por país</h2>
@@ -489,6 +509,7 @@ CZE<br>
 <ul>
 <li><p>Propongo instigar en los casos límites de ambos grupos</p></li>
 <li><p>En los países OCDE, Chile es el que presenta menor diferencia en autoeficacia específica, lo cual se alinearía con la hipótesis presentada</p></li>
+<li><p>En la autoeficacia general, la beta con menor efecto (en los paises no OCDE) es Argentina</p></li>
 </ul>
 </section>
 </section>

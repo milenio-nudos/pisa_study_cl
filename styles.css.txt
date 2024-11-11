@@ -1,3 +1,0 @@
-.Rtable1-zebra, .Rtable1-zebra th, .Rtable1-zebra td {
-  color: black;
-}

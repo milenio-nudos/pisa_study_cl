@@ -7,7 +7,7 @@ editor: visual
 # Análisis factorial y modelos lineales por país
 
 ```{r}
-pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters, table1, beeswarm)
+pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters, table1, beeswarm, openxlsx)
 options(scipen = 999) 
 rm(list = ls()) 
 ```
@@ -55,41 +55,43 @@ tabla_resultados
 ## Modelos de regresión lineal por país
 
 ```{r}
+  
+# Crear modelos generales y específicos agrupados por código de país
+modelo_effgen <- pisa22ict %>%
+  group_by(CNT) %>%
+  nest() %>%
+  mutate(modelo = map(data, ~lm(effgen ~ sex, data = .x)))
 
-#Modelos generales y específicos, group by código país
+modelo_effspec <- pisa22ict %>%
+  group_by(CNT) %>%
+  nest() %>%
+  mutate(modelo = map(data, ~lm(effspec ~ sex, data = .x)))
 
-  modelo_effgen <- pisa22ict %>%
-    group_by(CNT) %>%
-    do(modelo = lm(effgen ~ sex, data = .))
+# Extraer resúmenes individuales, manteniendo el CNT
+models_effgen <- modelo_effgen %>%
+  mutate(summary = map(modelo, summary)) %>%
+  select(CNT, summary)
 
-  modelo_effspec <- pisa22ict %>%
-    group_by(CNT) %>%
-    do(modelo = lm(effspec ~ sex, data = .))
+models_effspec <- modelo_effspec %>%
+  mutate(summary = map(modelo, summary)) %>%
+  select(CNT, summary)
 
-# Extraer modelos individuales
-models_effgen <- lapply(modelo_effgen$modelo, summary)
-models_effspec <- lapply(modelo_effspec$modelo, summary)
-
-unique(pisa22ict$CNT)
-
-models_effgen[[1]] #Modelos Albania
-models_effspec[[1]] 
-models_effgen[[10]] #Modelos Chile
-models_effspec[[10]]
+ View(models_effgen[[2]][[1]][["coefficients"]][[2]])
 
 # Crear un dataframe con las betas de los modelos
 
 coef_data1 <- data.frame(
-  coef_gen = sapply(1:52, function(i) models_effgen[[i]][["coefficients"]][[2]])
+  coef_gen = sapply(1:52, function(i) models_effgen[[2]][[i]][["coefficients"]][[2]]), Countrie = models_effgen [1]
 )
 
 coef_data2 <- data.frame(
-  coef_spec = sapply(1:52, function(i) models_effspec[[i]][["coefficients"]][[2]])
+  coef_spec = sapply(1:52, function(i) models_effspec[[2]][[i]][["coefficients"]][[2]]), Countrie = models_effspec [1]
 )
 
 # Creamos variable de si el país está en la OCDE
 
-aux <- c("no", "no", "si", "si", "si", "no", "no", "no", "si", "no", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "si", "si", "si", "si", "no", "no", "si", "no", "si", "no", "no", "no", "no", "no", "si", "no", "no", "no", "si", "si", "si", "si", "si", "si", "si", "no", "si", "si", "no")
+aux <- c("no", "no", "si", "si", "si", "no", "no", "no", "si", "no", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "no", "si", "si", "si", "si", "si", "si", "no", "no", "si", "si", "si", "no", "no", "no", "no", "no", "si", "si", "no", "no", "si", "si", "si", "si", "si", "no", "si", "no", "si", "si", "no")
+
 
 df_aux <- data.frame(OCDE = aux) # Convertimos en data.freame
 
@@ -152,13 +154,13 @@ tabla_descr2 #La tabla se visualiza así por incompatibilidad del paquete con qm
 
 ```
 
-Podemos ver una diferencia no significativa entre países de la OCDE en el estimador de efecto hombre en la autoeficacia digital general. En la específica si hay una diferencia significativa (p\<0.05), y esta es de 0,79 de efecto. O sea, los datos señalan que el ser hombre en países de la OCDE tendría un mayor efecto en la autoeficacia específica que en los países que no son de la OCDE. Se me ocurre que esto se puede deber a un mayor acceso de los jóvenes interesados en aprender competencias complejas a las tecnologías necesarias, que en los países no OCDE no encuentran tales recursos. También se puede instigar más en la composición de los datos bajo estos grupos, ya que se puede deber simplemente a la mayor desviación estándar de los países OCDE.
+En ambas autoeficacias (específica y general), se percibe una diferencia significativa (p \< 0,001) entre los países que pertenecen a la OCDE y los que no. Los datos apuntan a que la diferencia en autoeficacia específica es considerablemente mayor en los países de la OCDE, lo cual creo que podría deberse a una falta de recursos, que impide a los hombres (más interesados en aprender habilidades específicas) de países menos desarrollados diferenciarse en tal magnitud con las mujeres. Esto podría ir en la linea del planteamiento de Nicolás, que la batería estaría midiendo más habilidades que autoeficacias. En la autoeficacia general el efecto es contrario, o sea, los hombres reportan muchas menores capacidades generales que las mujeres en los países no-OCDE que en los si-OCDE.
 
 ```{r}
 
 # Visualización de las distribuciones de las betas
 
-beeswarm::beeswarm(coef_data1$coef,
+beeswarm::beeswarm(coef_data1$coef_gen,
                    horizontal=TRUE,
                    method="swarm",
                    col=c("#fe3057"),
@@ -168,7 +170,7 @@ beeswarm::beeswarm(coef_data1$coef,
                    )
 
 
-beeswarm::beeswarm(coef_data2$coef,
+beeswarm::beeswarm(coef_data2$coef_spec,
                    horizontal=TRUE,
                    method="swarm",
                    col=c("#fe3057"),
@@ -180,20 +182,20 @@ beeswarm::beeswarm(coef_data2$coef,
 
 # Visualización de las distribuciones de las betas, según país OCDE o no
 
-beeswarm::beeswarm(coef_data1$coef ~ coef_data1$OCDE,
+beeswarm::beeswarm(coef_data1$coef_gen ~ coef_data1$OCDE,
                    horizontal=TRUE,
                    method="swarm",
-                   col=c("#fe3057", "#5f5758"),
+                   col=c("#5f5758", "#fe3057"),
                    cex=1,
                    pch=18,
                    main= "Distribución de Coeficientes Autoeficacia general",
                    )
 
 
-beeswarm::beeswarm(coef_data2$coef ~ coef_data2$OCDE,
+beeswarm::beeswarm(coef_data2$coef_spec ~ coef_data2$OCDE,
                    horizontal=TRUE,
                    method="swarm",
-                   col=c("#fe3057", "#5f5758"),
+                   col=c("#5f5758", "#fe3057"),
                    cex=1,
                    pch=18,
                    main= "Distribución de Coeficientes Autoeficacia Específica",
@@ -201,10 +203,6 @@ beeswarm::beeswarm(coef_data2$coef ~ coef_data2$OCDE,
 
 ```
 
--   Dato atípico es croacia (en países no OCDE) lo cual hace sentido con el descubrimiento
+-   Propongo instigar en los casos límites de ambos grupos
 
-<!-- -->
-
--   Se debería investigar en los países ocde los casos outsider hacia la izquierda
-
--   
+-   En los países OCDE, Chile es el que presenta menor diferencia en autoeficacia específica, lo cual se alinearía con la hipótesis presentada

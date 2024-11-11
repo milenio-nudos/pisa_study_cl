@@ -101,7 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="análisis-factorial-y-modelos-lineales-por-país" class="level1">
 <h1>Análisis factorial y modelos lineales por país</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters, table1, beeswarm)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2, parameters, table1, beeswarm, openxlsx)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>) </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -226,255 +226,85 @@ CZE<br>
 <section id="modelos-de-regresión-lineal-por-país" class="level2">
 <h2 class="anchored" data-anchor-id="modelos-de-regresión-lineal-por-país">Modelos de regresión lineal por país</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Modelos generales y específicos, group by código país</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  modelo_effgen <span class="ot">&lt;-</span> pisa22ict <span class="sc">%&gt;%</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(CNT) <span class="sc">%&gt;%</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">do</span>(<span class="at">modelo =</span> <span class="fu">lm</span>(effgen <span class="sc">~</span> sex, <span class="at">data =</span> .))</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear modelos generales y específicos agrupados por código de país</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>modelo_effgen <span class="ot">&lt;-</span> pisa22ict <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CNT) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">modelo =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(effgen <span class="sc">~</span> sex, <span class="at">data =</span> .x)))</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  modelo_effspec <span class="ot">&lt;-</span> pisa22ict <span class="sc">%&gt;%</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(CNT) <span class="sc">%&gt;%</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">do</span>(<span class="at">modelo =</span> <span class="fu">lm</span>(effspec <span class="sc">~</span> sex, <span class="at">data =</span> .))</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer modelos individuales</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>models_effgen <span class="ot">&lt;-</span> <span class="fu">lapply</span>(modelo_effgen<span class="sc">$</span>modelo, summary)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>models_effspec <span class="ot">&lt;-</span> <span class="fu">lapply</span>(modelo_effspec<span class="sc">$</span>modelo, summary)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(pisa22ict<span class="sc">$</span>CNT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&lt;labelled&lt;character&gt;[52]&gt;: Country code 3-character
- [1] ALB ARG AUS AUT BEL BRA BRN BGR CHL TAP CRI HRV CZE DNK DOM EST FIN GEO DEU
-[20] GRC HKG HUN ISL IRL ISR ITA JPN KAZ JOR KOR LVA LTU MAC MYS MLT MAR PAN POL
-[39] ROU SAU SGP SVK SVN ESP SWE CHE THA TUR QUR GBR USA URY
-
-Labels:
- value                        label
-   MDA          Republic of Moldova
-   THA                     Thailand
-   BRA                       Brazil
-   FRA                       France
-   USA                United States
-   ITA                        Italy
-   LVA                       Latvia
-   ALB                      Albania
-   SRB                       Serbia
-   UZB                   Uzbekistan
-   MAC                Macao (China)
-   GRC                       Greece
-   MKD              North Macedonia
-   NLD                  Netherlands
-   CHE                  Switzerland
-   MNE                   Montenegro
-   ARE         United Arab Emirates
-   PSE        Palestinian Authority
-   SWE                       Sweden
-   CZE               Czech Republic
-   HKG            Hong Kong (China)
-   MNG                     Mongolia
-   ARG                    Argentina
-   CRI                   Costa Rica
-   DNK                      Denmark
-   SVK              Slovak Republic
-   BEL                      Belgium
-   CHL                        Chile
-   PHL                  Philippines
-   COL                     Colombia
-   POL                       Poland
-   IRL                      Ireland
-   ISL                      Iceland
-   NZL                  New Zealand
-   JAM                      Jamaica
-   KHM                     Cambodia
-   VNM                     Viet Nam
-   DOM           Dominican Republic
-   GTM                    Guatemala
-   CAN                       Canada
-   PAN                       Panama
-   IDN                    Indonesia
-   FIN                      Finland
-   JPN                        Japan
-   BRN            Brunei Darussalam
-   HUN                      Hungary
-   SVN                     Slovenia
-   GEO                      Georgia
-   TAP               Chinese Taipei
-   SGP                    Singapore
-   ESP                        Spain
-   MAR                      Morocco
-   GBR               United Kingdom
-   PER                         Peru
-   BGR                     Bulgaria
-   JOR                       Jordan
-   KOR                        Korea
-   NOR                       Norway
-   ISR                       Israel
-   QUR Ukrainian regions (18 of 27)
-   TUR                      Türkiye
-   AUS                    Australia
-   MYS                     Malaysia
-   QAT                        Qatar
-   MLT                        Malta
-   PRT                     Portugal
-   EST                      Estonia
-   AUT                      Austria
-   SAU                 Saudi Arabia
-   DEU                      Germany
-   ROU                      Romania
-   LTU                    Lithuania
-   SLV                  El Salvador
-   HRV                      Croatia
-   KSV                       Kosovo
-   MEX                       Mexico
-   QCY                       Cyprus
-   PRY                     Paraguay
-   URY                      Uruguay
-   KAZ                   Kazakhstan
-   QAZ            Baku (Azerbaijan)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>models_effgen[[<span class="dv">1</span>]] <span class="co">#Modelos Albania</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = effgen ~ sex, data = .)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.2493 -0.4159  0.1134  0.7507  0.9134 
-
-Coefficients:
-            Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)  3.41193    0.04243  80.407 &lt; 0.0000000000000002 ***
-sex         -0.16267    0.02737  -5.943        0.00000000308 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.8145 on 3554 degrees of freedom
-  (2573 observations deleted due to missingness)
-Multiple R-squared:  0.009839,  Adjusted R-squared:  0.00956 
-F-statistic: 35.31 on 1 and 3554 DF,  p-value: 0.000000003077</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>models_effspec[[<span class="dv">1</span>]] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = effspec ~ sex, data = .)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.1710 -0.4210  0.0790  0.8290  0.9214 
-
-Coefficients:
-            Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)  3.26341    0.04699  69.448 &lt; 0.0000000000000002 ***
-sex         -0.09240    0.03049  -3.031              0.00246 ** 
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.8631 on 3226 degrees of freedom
-  (2901 observations deleted due to missingness)
-Multiple R-squared:  0.002839,  Adjusted R-squared:  0.00253 
-F-statistic: 9.185 on 1 and 3226 DF,  p-value: 0.002459</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>models_effgen[[<span class="dv">10</span>]] <span class="co">#Modelos Chile</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = effgen ~ sex, data = .)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.3894 -0.3071  0.1929  0.5929  0.6929 
-
-Coefficients:
-            Estimate Std. Error t value             Pr(&gt;|t|)    
-(Intercept)  3.47171    0.03210 108.147 &lt; 0.0000000000000002 ***
-sex         -0.08231    0.02009  -4.096            0.0000427 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.6706 on 4459 degrees of freedom
-  (2027 observations deleted due to missingness)
-Multiple R-squared:  0.003749,  Adjusted R-squared:  0.003526 
-F-statistic: 16.78 on 1 and 4459 DF,  p-value: 0.0000427</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>models_effspec[[<span class="dv">10</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = effspec ~ sex, data = .)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--1.6682 -0.6682  0.1117  0.8318  1.3617 
-
-Coefficients:
-            Estimate Std. Error t value            Pr(&gt;|t|)    
-(Intercept)  2.60842    0.04708  55.405 &lt;0.0000000000000002 ***
-sex          0.02990    0.02945   1.015                0.31    
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 0.9715 on 4355 degrees of freedom
-  (2131 observations deleted due to missingness)
-Multiple R-squared:  0.0002365, Adjusted R-squared:  6.944e-06 
-F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un dataframe con las betas de los modelos</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>coef_data1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_gen =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="cf">function</span>(i) models_effgen[[i]][[<span class="st">"coefficients"</span>]][[<span class="dv">2</span>]])</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>coef_data2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_spec =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="cf">function</span>(i) models_effspec[[i]][[<span class="st">"coefficients"</span>]][[<span class="dv">2</span>]])</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Creamos variable de si el país está en la OCDE</span></span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>aux <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>)</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>df_aux <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">OCDE =</span> aux) <span class="co"># Convertimos en data.freame</span></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>coef_data1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data1, df_aux) <span class="co"># Unimos al data frame de las betas</span></span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>coef_data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data2, df_aux) <span class="co"># Unimos al data frame de las betas</span></span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(df_aux, aux) <span class="co"># Removemos objetos auxiliares</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>modelo_effspec <span class="ot">&lt;-</span> pisa22ict <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(CNT) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">modelo =</span> <span class="fu">map</span>(data, <span class="sc">~</span><span class="fu">lm</span>(effspec <span class="sc">~</span> sex, <span class="at">data =</span> .x)))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraer resúmenes individuales, manteniendo el CNT</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>models_effgen <span class="ot">&lt;-</span> modelo_effgen <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">summary =</span> <span class="fu">map</span>(modelo, summary)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(CNT, summary)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>models_effspec <span class="ot">&lt;-</span> modelo_effspec <span class="sc">%&gt;%</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">summary =</span> <span class="fu">map</span>(modelo, summary)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(CNT, summary)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a> <span class="fu">View</span>(models_effgen[[<span class="dv">2</span>]][[<span class="dv">1</span>]][[<span class="st">"coefficients"</span>]][[<span class="dv">2</span>]])</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Crear un dataframe con las betas de los modelos</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>coef_data1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_gen =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="cf">function</span>(i) models_effgen[[<span class="dv">2</span>]][[i]][[<span class="st">"coefficients"</span>]][[<span class="dv">2</span>]]), <span class="at">Countrie =</span> models_effgen [<span class="dv">1</span>]</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>coef_data2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_spec =</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">52</span>, <span class="cf">function</span>(i) models_effspec[[<span class="dv">2</span>]][[i]][[<span class="st">"coefficients"</span>]][[<span class="dv">2</span>]]), <span class="at">Countrie =</span> models_effspec [<span class="dv">1</span>]</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Creamos variable de si el país está en la OCDE</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>aux <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>, <span class="st">"si"</span>, <span class="st">"si"</span>, <span class="st">"no"</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>df_aux <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">OCDE =</span> aux) <span class="co"># Convertimos en data.freame</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>coef_data1 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data1, df_aux) <span class="co"># Unimos al data frame de las betas</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>coef_data2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data2, df_aux) <span class="co"># Unimos al data frame de las betas</span></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(df_aux, aux) <span class="co"># Removemos objetos auxiliares</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="análisis-descriptivo-y-visualización-de-estimadores-por-país" class="level2">
 <h2 class="anchored" data-anchor-id="análisis-descriptivo-y-visualización-de-estimadores-por-país">Análisis descriptivo y visualización de estimadores por país</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pvalue <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Construct vectors of data y, and groups (strata) g</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">unlist</span>(x)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x), <span class="at">times=</span><span class="fu">sapply</span>(x, length)))</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(y)) {</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For numeric variables, perform a standard 2-sample t-test</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        p <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> g)<span class="sc">$</span>p.value</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For categorical variables, perform a chi-squared test of independence</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        p <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(<span class="fu">table</span>(y, g))<span class="sc">$</span>p.value</span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format the p-value, using an HTML entity for the less-than sign.</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The initial empty string places the output on the line below the variable label.</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">""</span>, <span class="fu">sub</span>(<span class="st">"&lt;"</span>, <span class="st">"&amp;lt;"</span>, <span class="fu">format.pval</span>(p, <span class="at">digits=</span><span class="dv">3</span>, <span class="at">eps=</span><span class="fl">0.001</span>)))</span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Descrpitivos de los estimadores por país</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>df_aux <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data1, coef_data2)</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>tabla_descr <span class="ot">&lt;-</span> table1<span class="sc">::</span><span class="fu">table1</span>(<span class="sc">~</span> coef_gen <span class="sc">+</span> coef_spec <span class="sc">+</span> OCDE, <span class="at">data=</span>df_aux, <span class="at">topclass=</span><span class="st">"Rtable1-zebra"</span>, <span class="at">caption =</span> <span class="st">"Tabla 1: Estadísticos Descriptivos Estimadores"</span>,</span>
-<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">footnote =</span> <span class="st">"Fuente: Elaboración propia con datos de PISA."</span>)</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>tabla_descr2 <span class="ot">&lt;-</span> table1<span class="sc">::</span><span class="fu">table1</span>(<span class="sc">~</span> coef_gen <span class="sc">+</span> coef_spec <span class="sc">|</span> OCDE, <span class="at">data=</span>df_aux, <span class="at">topclass=</span><span class="st">"Rtable1-zebra"</span>, <span class="at">overall=</span><span class="cn">FALSE</span>, <span class="at">extra.col=</span><span class="fu">list</span>(<span class="st">`</span><span class="at">P-value</span><span class="st">`</span><span class="ot">=</span>pvalue), <span class="at">caption =</span> <span class="st">"Tabla 2: Comparación OCDE y no OCDE"</span>,</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">footnote =</span> <span class="st">"Fuente: Elaboración propia con datos de PISA."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pvalue <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Construct vectors of data y, and groups (strata) g</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    y <span class="ot">&lt;-</span> <span class="fu">unlist</span>(x)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x), <span class="at">times=</span><span class="fu">sapply</span>(x, length)))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.numeric</span>(y)) {</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For numeric variables, perform a standard 2-sample t-test</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        p <span class="ot">&lt;-</span> <span class="fu">t.test</span>(y <span class="sc">~</span> g)<span class="sc">$</span>p.value</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># For categorical variables, perform a chi-squared test of independence</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>        p <span class="ot">&lt;-</span> <span class="fu">chisq.test</span>(<span class="fu">table</span>(y, g))<span class="sc">$</span>p.value</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format the p-value, using an HTML entity for the less-than sign.</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># The initial empty string places the output on the line below the variable label.</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">""</span>, <span class="fu">sub</span>(<span class="st">"&lt;"</span>, <span class="st">"&amp;lt;"</span>, <span class="fu">format.pval</span>(p, <span class="at">digits=</span><span class="dv">3</span>, <span class="at">eps=</span><span class="fl">0.001</span>)))</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Descrpitivos de los estimadores por país</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>df_aux <span class="ot">&lt;-</span> <span class="fu">cbind</span>(coef_data1, coef_data2)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>tabla_descr <span class="ot">&lt;-</span> table1<span class="sc">::</span><span class="fu">table1</span>(<span class="sc">~</span> coef_gen <span class="sc">+</span> coef_spec <span class="sc">+</span> OCDE, <span class="at">data=</span>df_aux, <span class="at">topclass=</span><span class="st">"Rtable1-zebra"</span>, <span class="at">caption =</span> <span class="st">"Tabla 1: Estadísticos Descriptivos Estimadores"</span>,</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">footnote =</span> <span class="st">"Fuente: Elaboración propia con datos de PISA."</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>tabla_descr2 <span class="ot">&lt;-</span> table1<span class="sc">::</span><span class="fu">table1</span>(<span class="sc">~</span> coef_gen <span class="sc">+</span> coef_spec <span class="sc">|</span> OCDE, <span class="at">data=</span>df_aux, <span class="at">topclass=</span><span class="st">"Rtable1-zebra"</span>, <span class="at">overall=</span><span class="cn">FALSE</span>, <span class="at">extra.col=</span><span class="fu">list</span>(<span class="st">`</span><span class="at">P-value</span><span class="st">`</span><span class="ot">=</span>pvalue), <span class="at">caption =</span> <span class="st">"Tabla 2: Comparación OCDE y no OCDE"</span>,</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">footnote =</span> <span class="st">"Fuente: Elaboración propia con datos de PISA."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="tabla-descriptivos-estimadores" class="level3">
 <h3 class="anchored" data-anchor-id="tabla-descriptivos-estimadores">Tabla descriptivos estimadores</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tabla_descr <span class="co">#La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>tabla_descr <span class="co">#La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="Rtable1"><table class="Rtable1-zebra"><caption>Tabla 1: Estadísticos Descriptivos Estimadores</caption>
 
@@ -517,11 +347,11 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </tr>
 <tr>
 <td class="rowlabel">no</td>
-<td>23 (44.2%)</td>
+<td>22 (42.3%)</td>
 </tr>
 <tr>
 <td class="rowlabel lastrow">si</td>
-<td class="lastrow">29 (55.8%)</td>
+<td class="lastrow">30 (57.7%)</td>
 </tr>
 </tbody>
 </table>
@@ -533,15 +363,15 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 <section id="tabla-comparativa-países-ocde-y-no-ocde" class="level3">
 <h3 class="anchored" data-anchor-id="tabla-comparativa-países-ocde-y-no-ocde">Tabla comparativa países OCDE y no OCDE</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>tabla_descr2 <span class="co">#La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tabla_descr2 <span class="co">#La tabla se visualiza así por incompatibilidad del paquete con qmd. Sin embargo cuando se renderiza en html se ve bien</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="Rtable1"><table class="Rtable1-zebra"><caption>Tabla 2: Comparación OCDE y no OCDE</caption>
 
 <thead>
 <tr>
 <th class="rowlabel firstrow lastrow"></th>
-<th class="firstrow lastrow"><span class="stratlabel">no<br><span class="stratn">(N=23)</span></span></th>
-<th class="firstrow lastrow"><span class="stratlabel">si<br><span class="stratn">(N=29)</span></span></th>
+<th class="firstrow lastrow"><span class="stratlabel">no<br><span class="stratn">(N=22)</span></span></th>
+<th class="firstrow lastrow"><span class="stratlabel">si<br><span class="stratn">(N=30)</span></span></th>
 <th class="firstrow lastrow"><span class="stratlabel">P-value</span></th>
 </tr>
 </thead><tfoot><tr><td colspan="4" class="Rtable1-footnote"><p>Fuente: Elaboración propia con datos de PISA.</p>
@@ -556,14 +386,14 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </tr>
 <tr>
 <td class="rowlabel">Mean (SD)</td>
-<td>-0.117 (0.0501)</td>
-<td>-0.103 (0.0511)</td>
-<td>0.309</td>
+<td>-0.142 (0.0391)</td>
+<td>-0.0848 (0.0445)</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td class="rowlabel lastrow">Median [Min, Max]</td>
-<td class="lastrow">-0.129 [-0.197, 0.00379]</td>
-<td class="lastrow">-0.108 [-0.203, 0.00712]</td>
+<td class="lastrow">-0.149 [-0.203, -0.0551]</td>
+<td class="lastrow">-0.0844 [-0.154, 0.00712]</td>
 <td class="lastrow"></td>
 </tr>
 <tr>
@@ -574,14 +404,14 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </tr>
 <tr>
 <td class="rowlabel">Mean (SD)</td>
-<td>0.101 (0.118)</td>
-<td>0.180 (0.105)</td>
-<td>0.0161</td>
+<td>0.0533 (0.0824)</td>
+<td>0.212 (0.0889)</td>
+<td>&lt;0.001</td>
 </tr>
 <tr>
 <td class="rowlabel lastrow">Median [Min, Max]</td>
-<td class="lastrow">0.101 [-0.0924, 0.404]</td>
-<td class="lastrow">0.175 [-0.0397, 0.357]</td>
+<td class="lastrow">0.0576 [-0.0924, 0.187]</td>
+<td class="lastrow">0.207 [0.0299, 0.404]</td>
 <td class="lastrow"></td>
 </tr>
 </tbody>
@@ -589,18 +419,18 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </div>
 </div>
 </div>
-<p>Podemos ver una diferencia no significativa entre países de la OCDE en el estimador de efecto hombre en la autoeficacia digital general. En la específica si hay una diferencia significativa (p&lt;0.05), y esta es de 0,79 de efecto. O sea, los datos señalan que el ser hombre en países de la OCDE tendría un mayor efecto en la autoeficacia específica que en los países que no son de la OCDE. Se me ocurre que esto se puede deber a un mayor acceso de los jóvenes interesados en aprender competencias complejas a las tecnologías necesarias, que en los países no OCDE no encuentran tales recursos. También se puede instigar más en la composición de los datos bajo estos grupos, ya que se puede deber simplemente a la mayor desviación estándar de los países OCDE.</p>
+<p>En ambas autoeficacias (específica y general), se percibe una diferencia significativa (p &lt; 0,001) entre los países que pertenecen a la OCDE y los que no. Los datos apuntan a que la diferencia en autoeficacia específica es considerablemente mayor en los países de la OCDE, lo cual creo que podría deberse a una falta de recursos, que impide a los hombres (más interesados en aprender habilidades específicas) de países menos desarrollados diferenciarse en tal magnitud con las mujeres. Esto podría ir en la linea del planteamiento de Nicolás, que la batería estaría midiendo más habilidades que autoeficacias. En la autoeficacia general el efecto es contrario, o sea, los hombres reportan muchas menores capacidades generales que las mujeres en los países no-OCDE que en los si-OCDE.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de las distribuciones de las betas</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data1<span class="sc">$</span>coef,</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>),</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia general"</span>,</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de las distribuciones de las betas</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data1<span class="sc">$</span>coef_gen,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia general"</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -608,14 +438,14 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data2<span class="sc">$</span>coef,</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>),</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia Específica"</span>,</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data2<span class="sc">$</span>coef_spec,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia Específica"</span>,</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -623,16 +453,16 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de las distribuciones de las betas, según país OCDE o no</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data1<span class="sc">$</span>coef <span class="sc">~</span> coef_data1<span class="sc">$</span>OCDE,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>, <span class="st">"#5f5758"</span>),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia general"</span>,</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualización de las distribuciones de las betas, según país OCDE o no</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data1<span class="sc">$</span>coef_gen <span class="sc">~</span> coef_data1<span class="sc">$</span>OCDE,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#5f5758"</span>, <span class="st">"#fe3057"</span>),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia general"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -640,14 +470,14 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data2<span class="sc">$</span>coef <span class="sc">~</span> coef_data2<span class="sc">$</span>OCDE,</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#fe3057"</span>, <span class="st">"#5f5758"</span>),</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia Específica"</span>,</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>beeswarm<span class="sc">::</span><span class="fu">beeswarm</span>(coef_data2<span class="sc">$</span>coef_spec <span class="sc">~</span> coef_data2<span class="sc">$</span>OCDE,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">horizontal=</span><span class="cn">TRUE</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method=</span><span class="st">"swarm"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">col=</span><span class="fu">c</span>(<span class="st">"#5f5758"</span>, <span class="st">"#fe3057"</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">cex=</span><span class="dv">1</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pch=</span><span class="dv">18</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">main=</span> <span class="st">"Distribución de Coeficientes Autoeficacia Específica"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                   )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -657,12 +487,8 @@ F-statistic:  1.03 on 1 and 4355 DF,  p-value: 0.3102</code></pre>
 </div>
 </div>
 <ul>
-<li>Dato atípico es croacia (en países no OCDE) lo cual hace sentido con el descubrimiento</li>
-</ul>
-<!-- -->
-<ul>
-<li><p>Se debería investigar en los países ocde los casos outsider hacia la izquierda</p></li>
-<li></li>
+<li><p>Propongo instigar en los casos límites de ambos grupos</p></li>
+<li><p>En los países OCDE, Chile es el que presenta menor diferencia en autoeficacia específica, lo cual se alinearía con la hipótesis presentada</p></li>
 </ul>
 </section>
 </section>

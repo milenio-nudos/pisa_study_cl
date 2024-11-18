@@ -78,7 +78,11 @@ ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
         )
 ```
 
+**Agregar labels de los outlyers con geomtext:** crear nueva columna en el dataframe
+
 Al parecer, todas las variables calzan en una categoría exeptuando ICTQ10JA, que presenta cargas positivas y de magnitud similar en ambas dimensiones. Es posible ignorar esa pregunta para el análisis.
+
+Q08, Q09, Q12 y Q13 tienen cargas similares en ambos factores.
 
 ## Comparación índice de autoeficacia entre países OCDE y no OCDE
 
@@ -221,7 +225,6 @@ tabla_4 #La tabla se visualiza así por incompatibilidad del paquete con qmd. Si
 
 Desviación estándar en los estimadores de autoeficacia específica es mucho mayor.
 
-
 En ambas autoeficacias (específica y general), se percibe una diferencia significativa (p \< 0,001) entre los países que pertenecen a la OCDE y los que no. Los datos apuntan a que la diferencia en autoeficacia específica es considerablemente mayor en los países de la OCDE, lo cual creo que podría deberse a una falta de recursos, que impide a los hombres (más interesados en aprender habilidades específicas) de países menos desarrollados diferenciarse en tal magnitud con las mujeres **(esta hipótesis pierde fuerza al analizar el índice según OCDE y no OCDE)**. Esto podría ir en la linea del planteamiento de Nicolás, que la batería estaría midiendo más habilidades que autoeficacias. En la autoeficacia general el efecto es contrario, o sea, los hombres reportan muchas menores capacidades generales que las mujeres en los países no-OCDE que en los si-OCDE.
 
 ```{r}
@@ -285,21 +288,18 @@ pisa22ict$OCDE <- as.factor(pisa22ict$OCDE)
 
 pisa22ict$CNT <- as.factor(pisa22ict$CNT)
 
-modelo_3niveles_effgen <- lmer(effgen ~ sex + 
-                        (1 | OCDE) +  # Efecto aleatorio en Nivel 3
+modelo_3niveles_effgen <- lmer(effgen ~ sex + OCDE +
                         (1 | CNT),  # Efecto aleatorio en Nivel 2
                         data = pisa22ict)
-modelo_3niveles_effgen2 <- lmer(effgen ~ sex + 
-                         (1 + sex | OCDE) +  # Pendiente aleatoria en Nivel 3
+
+modelo_3niveles_effgen2 <- lmer(effgen ~ sex + OCDE + 
                          (1 + sex | CNT),  # Pendiente aleatoria en Nivel 2
                          data = pisa22ict)
 
-modelo_3niveles_effspec <- lmer(effspec ~ sex + 
-                        (1 | OCDE) +  # Efecto aleatorio en Nivel 3
+modelo_3niveles_effspec <- lmer(effspec ~ sex + OCDE +
                         (1 | CNT),  # Efecto aleatorio en Nivel 2
                         data = pisa22ict)
-modelo_3niveles_effspec2 <- lmer(effspec ~ sex + 
-                         (1 + sex | OCDE) +  # Pendiente aleatoria en Nivel 3
+modelo_3niveles_effspec2 <- lmer(effspec ~ sex + OCDE +
                          (1 + sex | CNT),  # Pendiente aleatoria en Nivel 2
                          data = pisa22ict)
 
@@ -313,3 +313,7 @@ sjPlot::tab_model(modelo_3niveles_effgen, modelo_3niveles_effgen2, modelo_3nivel
 
 ```
 
+```         
+Aviso: Model failed to converge with max|grad| = 0.00602937 (tol = 0.002, component 1) 
+Aviso: Model failed to converge with max|grad| = 0.0031605 (tol = 0.002, component 1)
+```

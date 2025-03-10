@@ -1,0 +1,277 @@
+---
+pagetitle: "Diferencias de género en la autoeficacia digital en la escuela en 52 países"
+Author: Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar, Tomás Urzúa
+bibliography: ../../../input/bib/icils_nudos.bib
+csl: ../../../input/bib/apa.csl
+
+knitr:
+  opts_chunk:
+    collapse: true
+    comment: "#>"
+    R.options:
+      knitr.graphics.auto_pdf: true
+      
+format:
+  revealjs:
+    logo: images/banner_nudos.jpg
+    slide-number: true
+    theme: [pp.scss]
+    title-slide-attributes:
+      visibility: false
+    transition: zoom
+    transition-speed: slow
+# data-background-image: images/cover.jpg
+# data-background-size: cover
+    auto-play-media: true
+  pdf:
+    format: beamer 
+    keep-tex: true  # Debug LaTeX output if needed
+editor: visual
+---
+
+```{r preparacion}
+pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2,
+               parameters, table1, beeswarm, lme4, rio, skimr, effects,
+               labelled)
+
+options(scipen = 999) 
+rm(list = ls()) 
+
+pisa22ict <- readRDS("../../../input/proc_data/pisa22ict.rds")
+
+# "No sé" como NA
+pisa22ict <- pisa22ict|>
+  mutate(across(starts_with("IC183Q0"),~ ifelse(. == 5, NA, .)))
+
+# Recodificación de variables
+var_label(pisa22ict) <- list(
+  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
+  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
+  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
+  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
+  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
+  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
+  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
+  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
+  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
+  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
+  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
+  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
+  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
+  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."
+)
+
+efficacy_variables <- pisa22ict |>
+  select(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA,
+         IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA,
+         IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
+
+
+```
+
+
+
+
+::::: columns
+::: {.column width="10%"}
+![](images/facso.jpg)
+
+![](images/demosal_logo.jpeg)
+
+![](images/qr.png)
+:::
+
+::: {.column .column-right width="85%"}
+<br>
+
+## **Diferencias de género en la autoeficacia digital en la escuela en 52 países**
+
+------------------------------------------------------------------------
+
+Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar & Tomás Urzúa
+
+#### Universidad de Chile & Millennium Nucleus of Inequalities and Digital Opportunities (*nudos.cl*)
+
+VIII Seminario Internacional de Desigualdad y Movilidad Social en América Latina- Río de Janeiro 24, 25 y 26 de marzo
+:::
+:::::
+
+::: notes
+Esta ponencia trata principalmente de las desigualdades digitales en la educación, es una especie de agenda diferente de la que he estado participando con otras personas en esta sala en el ámbito de la educación para la ciudadanía, pero creo que la dimensión digital está penetrando cada vez más en diferentes ámbitos de nuestra vida social y en diferentes etapas, y espero en el futuro seguir reforzando el vínculo entre lo cívico y lo digital en la investigación educativa.
+:::
+
+## NUDOS {.scrollable}
+
+
+
+
+```{=html}
+<iframe width="1000" height="500" src="https://www.nudos.cl/en/sobre-nudos/" title="Webpage example"></iframe>
+```
+
+
+
+
+[Más información: nudos.cl](https://www.nudos.cl/sobre-nudos/)
+
+![](images/banner_nudos.jpg){width="80%" fig-align="center"}
+
+![](images/lineas-nudos.png)
+
+::: notes
+Un poco de contexto: esta investigación forma parte de un proyecto de investigación sobre Desigualdades y Oportunidades Digitales (proyecto NUDOS) en el que estamos cubriendo áreas como la conectividad, la educación y la política con un amplio equipo de investigadores, más información en nuestra web.
+:::
+
+## Punto de inicio
+
+-   Competencias Digitales: "*Grado de conocimientos del funcionamiento y capacidades de las tecnologías para su uso seguro, crítico y responsable, que sirvan al individuo en ámbitos educativos, laborales y sociales*" [@falloonDigitalLiteracyDigital2020].
+
+-   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@banduraPsychologyHumanAgency2006;@ulfert-blank_assessing_2022].
+
+-   En contextos digitales, las brechas de competencia se cruzan con viejas desigualdades, y aparecen otras nuevas. La autoeficacia es un factor determinante en este ensamblaje [@dijk_digital_2020].
+
+## Autoeficacia Digital y Género
+
+::: {.incremental .highlight-last style="font-size: 130%;"}
+-   Las diferencias de género en el uso de las TIC's se ha **atenuado** durante el tiempo [@hargittaiDifferencesActualPerceived2006].
+
+-   Las estudiantes mujeres tienden a presentar menores niveles de confianza pero mayores competencias que los hombres [@punterGenderDifferencesComputer2017].
+
+-   La brecha de género en autoeficacia se produce principalmente en las tareas especializadas o avanzadas (Por sobre las generales o básicas)[@tomteGenderdifferencesSelfefficacyICT2011].
+:::
+
+##  {data-background-color="#5f5758"}
+
+::: {style="font-size: 250%; display: flex; justify-content: center; align-items: center"}
+</br> *¿Las brechas de género en autoeficacia digital se comporta uniformemente en diferentes países según el nivel de complejidad de la tarea?*
+:::
+
+## Hipótesis
+
+H<sub>1</sub>. Existen dos dimensiones de autoeficacia digital, que se corresponden a un nivel básico y uno avanzado.
+
+H<sub>2</sub>. Las mujeres tienden a presentar mayores niveles de autoeficacia digital general, en cambio los hombres presentan mayores niveles de autoeficacia específica.
+
+H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
+
+# Datos {data-background-color="#5f5758"}
+
+-   OCDE: Programa para la Evaluación internacional de estudiantes (PISA).
+-   `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` paises.
+-   Marco de trabajo Tecnologías de la Información y Comunicación.
+
+## Mediciones de autoeficacia {.smaller}
+
+¿En qué medida eres capaz de realizar las siguientes tareas cuando utilizas <dispositivos digitales>?
+
+::::: columns
+::: {.column width="50%"}
+#### Básica
+
+-   Buscar y encontrar información relevante en Internet.
+-   Evaluar la calidad de la información que has encontrado en Internet.
+-   Compartir información práctica con un grupo de estudiantes.
+-   Colaborar con otros estudiantes en una evaluación en grupo.
+-   Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.
+-   Redactar o editar un texto para una tarea escolar.\
+-   Recopilar y registrar datos (por ejemplo, utilizando registradores de datos, <Microsoft Access>, <Google form>, hojas de cálculo).\
+-   Crear una presentación multimedia (con sonido, imágenes y vídeo).
+:::
+
+::: {.column width="50%"}
+#### Avanzada
+
+-   Crear, actualizar y mantener una página web o un blog.\
+-   Cambiar la configuración de un dispositivo o aplicación para proteger mis datos y privacidad.\
+-   Seleccionar el programa o app más eficiente que me permita realizar una tarea concreta.
+-   Crear un programa informático (por ejemplo en <Scratch>, <Python>, <Java>).
+-   Identificar el origen de un error en un afeter de software considerando una lista de causas potenciales.
+-   Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.
+:::
+:::::
+
+Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con un poco de esfuerzo (3), Puedo hacerlo fácilmente (4).
+
+# Resultados {data-background-color="#5f5758"}
+
+## Descriptivos
+
+
+
+
+```{r}
+sjPlot::sjt.itemanalysis(efficacy_variables,
+                         show.kurtosis = F,
+                         show.shapiro = F)
+```
+
+
+
+
+## Análisis factorial general
+
+
+
+
+```{r}
+fac <- fa(r = eff, nfactors = 2, fm= "pa", rotate="promax")
+
+sjPlot::tab_fa(fac)
+```
+
+
+
+
+
+## Análisis factorial por país
+
+
+
+
+```{r}
+
+```
+
+
+
+
+## Modelo General
+
+## Modelo Multinivel: Efectos entre-países
+
+## Discusión
+
+::: {.incremental .highlight-last style="font-size: 130%;"}
+H<sub>1</sub>. Los modelos de medición comprueban que hay dos dimensiones en la autoeficacia digital.
+
+H<sub>2</sub>. Las mujeres presentan ventajas en la autoeficacia básica y los hombres en la autoeficacia especializada.
+
+H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
+:::
+
+## Conclusiones
+
+::: {.incremental .highlight-last style="font-size: 200%;"}
+-   Hay diferencias de género en los niveles de autoeficacia entre países?
+
+    -   Sí, pero depende del tipo de autoeficacia, así como del país en el que los estudiantes están insertos.
+:::
+
+
+## Próximos pasos {data-background-color="black"}
+
+::: {style="font-size: 180%;"}
+-   Comparaciones en el tiempo 2018-2022
+
+-   Explorar determinantes en las diferencias entre países
+
+-   Cruzar datos con otras evaluaciones de gran escala (ICILS, SIMCE, TIMSS)
+:::
+
+# Gracias!
+
+-   **Sitio web NUDOS:** [www.nudos.cl](https://www.nudos.cl/)
+-   **Repositorio GitHub del proyecto:** <https://github.com/milenio-nudos/pisa_study_cl>
+
+# Referencias bibliográficas
+

@@ -32,10 +32,27 @@ editor: visual
 ```{r preparacion}
 pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2,
                parameters, table1, beeswarm, lme4, rio, skimr, effects,
-               labelled)
+               labelled, knitr, kableExtra, stringr, sjmisc)
 
 options(scipen = 999) 
+options(digits = 2)
 rm(list = ls()) 
+
+variables_labels <- c(
+                 "Buscar y encontrar información relevante en Internet",
+                 "Evalúe la calidad de la información que ha encontrado en Internet",
+                 "Compartir información práctica con un grupo de estudiantes", 
+                 "Colaborar con otros estudiantes en una tarea de grupo",
+                 "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
+                 "Escribir o editar un texto para un trabajo escolar",
+                 "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).",
+                 "Crear una presentación multimedia (con sonido, imágenes o vídeo)",
+                 "Crear, actualizar y mantener una página web o un blog",
+                 "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
+                 "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta",
+                 "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])",
+                 "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.",
+                 "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.")
 
 pisa22ict <- readRDS("../../../input/proc_data/pisa22ict.rds")
 
@@ -62,7 +79,8 @@ var_label(pisa22ict) <- list(
 )
 
 efficacy_variables <- pisa22ict |>
-  select(IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA,
+  select(CNT, #Country
+         IC183Q01JA, IC183Q02JA, IC183Q03JA, IC183Q04JA, IC183Q05JA,
          IC183Q07JA, IC183Q08JA, IC183Q09JA, IC183Q10JA, IC183Q12JA,
          IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
 
@@ -87,7 +105,7 @@ efficacy_variables <- pisa22ict |>
 
 Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar & Tomás Urzúa
 
-#### Universidad de Chile & Millennium Nucleus of Inequalities and Digital Opportunities (*nudos.cl*)
+#### Universidad de Chile & Núcleo Milenio de Desigualdades y Oportunidades Digitales (*nudos.cl*)
 
 VIII Seminario Internacional de Desigualdad y Movilidad Social en América Latina- Río de Janeiro 24, 25 y 26 de marzo
 :::
@@ -134,7 +152,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 ##  {data-background-color="#5f5758"}
 
 ::: {style="font-size: 250%; display: flex; justify-content: center; align-items: center"}
-</br> *¿Las brechas de género en autoeficacia digital se comporta uniformemente en diferentes países según el nivel de complejidad de la tarea?*
+*¿Las brechas por género de autoeficacia digital se comporta uniformemente en diferentes países según el nivel de complejidad de la tarea?*
 :::
 
 ## Hipótesis
@@ -157,25 +175,22 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
 ::::: columns
 ::: {.column width="50%"}
-#### Básica
-
 -   Buscar y encontrar información relevante en Internet.
 -   Evaluar la calidad de la información que has encontrado en Internet.
 -   Compartir información práctica con un grupo de estudiantes.
 -   Colaborar con otros estudiantes en una evaluación en grupo.
 -   Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.
--   Redactar o editar un texto para una tarea escolar.\
--   Recopilar y registrar datos (por ejemplo, utilizando registradores de datos, <Microsoft Access>, <Google form>, hojas de cálculo).\
+-   Redactar o editar un texto para una tarea escolar.
+-   Recopilar y registrar datos (por ejemplo, utilizando registradores de datos, Microsoft Access, Google form, hojas de cálculo).
 -   Crear una presentación multimedia (con sonido, imágenes y vídeo).
 :::
 
 ::: {.column width="50%"}
-#### Avanzada
-
--   Crear, actualizar y mantener una página web o un blog.\
--   Cambiar la configuración de un dispositivo o aplicación para proteger mis datos y privacidad.\
+-   Cambiar la configuración de un dispositivo o aplicación para proteger mis datos y privacidad.
 -   Seleccionar el programa o app más eficiente que me permita realizar una tarea concreta.
--   Crear un programa informático (por ejemplo en <Scratch>, <Python>, <Java>).
+-   Crear, actualizar y mantener una página web o un blog.
+
+-   Crear un programa informático (por ejemplo en Scratch, Python, Java).
 -   Identificar el origen de un error en un afeter de software considerando una lista de causas potenciales.
 -   Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.
 :::
@@ -185,32 +200,227 @@ Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con 
 
 # Resultados {data-background-color="#5f5758"}
 
-## Descriptivos
+## Descriptivos {.smaller .scrollable}
 
 ```{r}
-sjPlot::sjt.itemanalysis(efficacy_variables,
-                         show.kurtosis = F,
-                         show.shapiro = F)
+sjmisc::descr(efficacy_variables, 
+      show = c("label", "mean", "sd", "NA.prc", "n"))%>%
+      kable(.,"html")%>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 ```
 
-## Análisis factorial general
+## Análisis factorial general {.smaller .scrollable}
 
 ```{r}
-fac <- fa(r = eff, nfactors = 2, fm= "pa", rotate="promax")
+fac <- fa(r = efficacy_variables|> select(-CNT),
+          nfactors = 2, fm= "pa", rotate="promax")
 
-sjPlot::tab_fa(fac)
+sjPlot::tab_fa(fac,
+               var.labels = variables_labels,
+               encoding = "UTF-8")
 ```
-
-
-## Análisis factorial por país
 
 ```{r}
+#| output: false
+
+# Group by CNT (código país)
+resultados_factoriales <- efficacy_variables %>%
+  group_by(CNT) %>%
+  group_split() %>%
+  map(~ fa(select(.x, -CNT), nfactors = 2, fm = "pa", rotate = "promax"))
+
+# Tabla con todos los resultados por país
+
+tabla_resultados <- map2_dfr(
+  resultados_factoriales,
+  unique(efficacy_variables$CNT),
+  ~ tibble(
+    Variable = rownames(.x$loadings),
+    CNT = .y,
+    CargaFactor1 = .x$loadings[, 1],
+    CargaFactor2 = .x$loadings[, 2]
+    )
+  ) %>%
+  arrange(Variable)
+
+tabla_resultados <- tabla_resultados %>% 
+  mutate(Factor1 = if_else(CargaFactor1 >0.5, TRUE, FALSE)
+) %>% 
+  mutate(Factor2 = if_else(CargaFactor2 >0.5, TRUE, FALSE))%>%
+  mutate(modelo = case_when(
+    Variable %in% c("IC183Q01JA", "IC183Q02JA", "IC183Q03JA", "IC183Q04JA","IC183Q05JA", "IC183Q07JA", "IC183Q08JA", "IC183Q09JA",
+"IC183Q12JA", "IC183Q13JA") &
+    Factor1 == TRUE ~ TRUE,
+    Variable %in% c("IC183Q10JA", "IC183Q14JA", "IC183Q15JA", "IC183Q16JA") &
+    Factor2 == TRUE ~ TRUE,
+    Variable %in% c("IC183Q01JA", "IC183Q02JA", "IC183Q03JA", "IC183Q04JA","IC183Q05JA", "IC183Q07JA", "IC183Q08JA", "IC183Q09JA",
+"IC183Q12JA", "IC183Q13JA") &
+    Factor1 == FALSE ~ FALSE,  
+    Variable %in% c("IC183Q10JA", "IC183Q14JA", "IC183Q15JA", "IC183Q16JA") &
+    Factor2 == FALSE ~ FALSE
+))
+
+tabla_resultados %>%
+  kable()
+```
+
+## Distribución de cargas factoriales por país 
+Autoeficacia General
+
+```{r}
+ggplot2::ggplot(tabla_resultados, aes(CargaFactor1, Variable)) +
+        geom_point() +
+        geom_point(
+          color="#fe3057"
+        )
+```
+
+## Distribución de cargas factoriales por país 
+Autoeficacia Especializada
+```{r}
+ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
+        geom_point() +
+        geom_point(
+          color="#fe3057"
+        )
+```
+
+
+```{r}
+#| output: false
+
+tabla_display <- tabla_resultados %>%
+  group_by(Variable) %>%
+  summarize(
+    TRUE_model = sum(modelo == TRUE, na.rm = TRUE),
+    FALSE_model = sum(modelo == FALSE, na.rm = TRUE),
+    prop_TRUE = TRUE_model / 52,
+    prop_FALSE = FALSE_model / 52,
+  )%>%
+  ungroup()%>%
+  mutate(Variable = recode(Variable,
+  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
+  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
+  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
+  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
+  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
+  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
+  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
+  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
+  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
+  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
+  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
+  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
+  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
+  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."))%>%
+  mutate(type = c("Básica","Básica","Básica","Básica","Básica",
+                  "Básica","Básica","Básica","Especializada",
+                  "Básica","Básica","Especializada",
+                  "Especializada","Especializada"))
+
+tabla_display |>
+  select(Variable,type,prop_TRUE,TRUE_model,FALSE_model)|>
+  kable()
+```
+
+
+## Distribución de cargas factoriales
+Proporción de países ajustados al modelo por variable
+
+```{r}
+tabla_resultados|>
+  count(Variable,modelo)|>
+  mutate(Variable = recode(Variable,
+  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
+  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
+  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
+  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
+  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
+  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
+  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
+  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
+  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
+  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
+  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
+  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
+  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
+  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."))|>
+  
+ggplot(aes(y = Variable, x = n, fill = modelo)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 80))
+```
+
+## Distribución de cargas factoriales
+Proporción de variables ajustadas al modelo por país
+
+```{r}
+tabla_resultados|>
+  mutate(CNT = to_label(CNT))|>
+  count(CNT,modelo)|>
+  
+ggplot(aes(y = CNT, x = n, fill = modelo)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 80))
+```
+
+# Modelos de regresión Multinivel
+
+
+## Tabla de resultados {.smaller}
+
+```{r}
+# Sex as factor
+pisa22ict$sexf=as.factor(pisa22ict$sex)
+pisa22ict$CNTRYID=to_label(pisa22ict$CNTRYID)
+
+
+#Autoeficacia General
+m2 <- lme4::lmer(effgen~ factor(sex) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+m2a <- lme4::lmer(effgen~ factor(sex) + (sex | CNTRYID), data = pisa22ict, REML=FALSE)
+
+#Autoeficacia Especializada
+m1 <- lme4::lmer(effspec~ factor(sex) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+m1a <- lme4::lmer(effspec~ factor(sex) + (sex | CNTRYID), data = pisa22ict, REML=FALSE)
+
+
+
+sjPlot::tab_model(m2,m2a,m1,m1a,
+                  p.style = "stars",
+                  dv.labels = c("effgen", "effgen pendiente aleatoria", "effspec", "effspec pendiente aleatoria"),
+                  p.threshold = c(0.05, 0.01, 0.001),
+                  show.se = FALSE,
+                  digits =2)
+
+
+#anova(m1, m1a)
+# Efecto global es -0,11 menos de autoeficacia para hombres.
+# Efecto es aleartorio entre países
+#anova(m2, m2a)
+# Efecto global es 0,14 de autoeficacia a favor de hombres.
+# Efecto es aleartorio entre países
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
+```
+
+
+## Efectos entre-países
+
+```{r}
+plot_model(m2a, type="re",
+    title = "Modelo aleatorio. Autoeficacia Digital General")
+# Aunque es negativo en varios países (unos 26), efecto es neutro o positivo en otros.
+# Varibilidad es pequeña
+```
+
+## Efectos entre-países
+
+```{r}
+plot_model(m1a, type="re",
+    title = "Modelo aleatorio. Autoeficacia Digital Especializada")
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
 
 ```
 
-## Modelo General
-
-## Modelo Multinivel: Efectos entre-países
 
 ## Discusión
 
@@ -234,9 +444,9 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 ## Próximos pasos {data-background-color="black"}
 
 ::: {style="font-size: 180%;"}
--   Comparaciones en el tiempo 2018-2022
+-   Análisis de invarianza
 
--   Explorar determinantes en las diferencias entre países
+-   Explorar determinantes en las diferencias entre países (PIB, OCDE, Indices digitales, etc...)
 
 -   Cruzar datos con otras evaluaciones de gran escala (ICILS, SIMCE, TIMSS)
 :::

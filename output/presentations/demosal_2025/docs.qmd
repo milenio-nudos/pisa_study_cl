@@ -107,7 +107,7 @@ efficacy_variables <- pisa22ict |>
 
 ------------------------------------------------------------------------
 
-Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar & Tomás Urzúa
+Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar, Ismael Urzúa & Tomás Urzúa
 
 #### Universidad de Chile & Núcleo Milenio de Desigualdades y Oportunidades Digitales (*nudos.cl*)
 
@@ -155,8 +155,10 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ##  {data-background-color="#5f5758"}
 
-::: {style="font-size: 250%; display: flex; justify-content: center; align-items: center"}
-*¿Las brechas por género de autoeficacia digital se comporta uniformemente en diferentes países según el nivel de complejidad de la tarea?*
+::: {style="font-size: 180%; display: flex; justify-content: center; align-items: center"}
+*¿De qué manera se comportan las brechas de género en autoeficacia digital?*
+
+*¿Qué diferencias existen entre los países acerca de las brechas de género en autoeficacia digital?*
 :::
 
 ## Hipótesis
@@ -208,18 +210,60 @@ Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con 
 
 # Resultados {data-background-color="#5f5758"}
 
+
+
+
+## Discusión
+
+::: {.incremental .highlight-last style="font-size: 130%;"}
+H<sub>1</sub>. Los modelos de medición comprueban que hay dos dimensiones en la autoeficacia digital.
+
+H<sub>2</sub>. Las mujeres presentan ventajas en la autoeficacia básica y los hombres en la autoeficacia especializada.
+
+H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
+:::
+
+## Conclusiones
+
+::: {.incremental .highlight-last style="font-size: 200%;"}
+-   Hay diferencias de género en los niveles de autoeficacia entre países?
+
+    -   Sí, pero depende del tipo de autoeficacia, así como del país en el que los estudiantes están insertos.
+:::
+
+## Próximos pasos {data-background-color="black"}
+
+::: {style="font-size: 180%;"}
+-   Análisis de invarianza
+
+-   Explorar determinantes en las diferencias entre países (PIB, OCDE, Indices digitales, etc...)
+
+-   Cruzar datos con otras evaluaciones de gran escala (ICILS, SIMCE, TIMSS)
+:::
+
+# Gracias!
+
+-   **Sitio web NUDOS:** [www.nudos.cl](https://www.nudos.cl/)
+-   **Repositorio GitHub del proyecto:** <https://github.com/milenio-nudos/pisa_study_cl>
+
+# Anexo
+
 ## Descriptivos {.smaller .scrollable}
 
 ```{r}
+#| eval: false
+
 sjmisc::descr(efficacy_variables, 
       show = c("label", "mean", "sd", "NA.prc", "n"))%>%
       kable(.,"html")%>%
       kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 ```
 
-## Análisis factorial general {.illustration}
+## Análisis factorial general {.scrollable}
 
 ```{r}
+#| eval: false
+
 fac <- fa(r = efficacy_variables|> select(-CNT),
           nfactors = 2, fm= "pa", rotate="promax")
 
@@ -229,7 +273,7 @@ sjPlot::tab_fa(fac,
 ```
 
 ```{r}
-#| output: false
+#| eval: false
 
 # Group by CNT (código país)
 resultados_factoriales <- efficacy_variables %>%
@@ -277,6 +321,8 @@ tabla_resultados %>%
 Autoeficacia General
 
 ```{r}
+#| eval: false
+
 ggplot2::ggplot(tabla_resultados, aes(CargaFactor1, Variable)) +
         geom_point() +
         geom_point(
@@ -289,6 +335,8 @@ ggplot2::ggplot(tabla_resultados, aes(CargaFactor1, Variable)) +
 Autoeficacia Especializada
 
 ```{r}
+#| eval: false
+
 ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
         geom_point() +
         geom_point(
@@ -297,7 +345,7 @@ ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
 ```
 
 ```{r}
-#| output: false
+#| eval: false
 
 tabla_display <- tabla_resultados %>%
   group_by(Variable) %>%
@@ -338,6 +386,8 @@ tabla_display |>
 Proporción de países ajustados al modelo por variable
 
 ```{r}
+#| eval: false
+
 tabla_resultados|>
   count(Variable,modelo)|>
   mutate(Variable = recode(Variable,
@@ -368,6 +418,8 @@ ggplot(aes(y = Variable, x = n, fill = modelo)) +
 Proporción de variables ajustadas al modelo por país
 
 ```{r}
+#| eval: false
+
 tabla_resultados|>
   mutate(CNT = to_label(CNT))|>
   count(CNT,modelo)|>
@@ -385,6 +437,8 @@ ggplot(aes(y = CNT, x = n, fill = modelo)) +
 ## Concentración de respuestas
 
 ```{r}
+#| eval: false
+
 # Crear un gráfico de densidad por grupos
 ggplot(pisa22ict, aes(x = effgen)) +
   geom_density(alpha = 0.6) +
@@ -398,6 +452,7 @@ ggplot(pisa22ict, aes(x = effgen)) +
 ## Concentración de respuestas
 
 ```{r}
+#| eval: false
 
 # Crear un gráfico de densidad por grupos
 ggplot(pisa22ict, aes(x = effspec)) +
@@ -412,6 +467,7 @@ ggplot(pisa22ict, aes(x = effspec)) +
 ## Descriptivos generales
 
 ```{r}
+#| eval: false
 
 table1::table1(~ effgen + effspec, data=pisa22ict, topclass="Rtable1-zebra", caption = "Tabla 1: Estadísticos Descriptivos índice",
                footnote = "Fuente: Elaboración propia con datos de PISA.")
@@ -421,6 +477,8 @@ table1::table1(~ effgen + effspec, data=pisa22ict, topclass="Rtable1-zebra", cap
 ## Descriptivos por género
 
 ```{r}
+#| eval: false
+
 pvalue <- function(x, ...) {
     # Construct vectors of data y, and groups (strata) g
     y <- unlist(x)
@@ -446,6 +504,8 @@ table1::table1(~ effgen + effspec | sex, data=pisa22ict|>drop_na(sex)|>mutate(se
 ## Tabla de resultados {.smaller}
 
 ```{r}
+#| eval: false
+
 # Sex as factor
 pisa22ict$sexf=as.factor(pisa22ict$sex)
 pisa22ict$CNTRYID=to_label(pisa22ict$CNTRYID)
@@ -481,6 +541,8 @@ sjPlot::tab_model(m2,m2a,m1,m1a,
 ## Efectos entre-países
 
 ```{r}
+#| eval: false
+
 plot_model(m2a, type="re",
     title = "Modelo aleatorio. Autoeficacia Digital General")
 # Aunque es negativo en varios países (unos 26), efecto es neutro o positivo en otros.
@@ -490,6 +552,8 @@ plot_model(m2a, type="re",
 ## Efectos entre-países
 
 ```{r}
+#| eval: false
+
 plot_model(m1a, type="re",
     title = "Modelo aleatorio. Autoeficacia Digital Especializada")
 # Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
@@ -499,6 +563,8 @@ plot_model(m1a, type="re",
 ## Modelos OCDE {.smaller}
 
 ```{r}
+#| eval: false
+
 m3a <- lme4::lmer(effgen~ factor(sex) + factor(OCDE) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
 m3b <- lme4::lmer(effspec~ factor(sex) + factor(OCDE) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
 
@@ -510,37 +576,5 @@ sjPlot::tab_model(m3a,m3b,
                   digits =2)
 ```
 
-## Discusión
-
-::: {.incremental .highlight-last style="font-size: 130%;"}
-H<sub>1</sub>. Los modelos de medición comprueban que hay dos dimensiones en la autoeficacia digital.
-
-H<sub>2</sub>. Las mujeres presentan ventajas en la autoeficacia básica y los hombres en la autoeficacia especializada.
-
-H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
-:::
-
-## Conclusiones
-
-::: {.incremental .highlight-last style="font-size: 200%;"}
--   Hay diferencias de género en los niveles de autoeficacia entre países?
-
-    -   Sí, pero depende del tipo de autoeficacia, así como del país en el que los estudiantes están insertos.
-:::
-
-## Próximos pasos {data-background-color="black"}
-
-::: {style="font-size: 180%;"}
--   Análisis de invarianza
-
--   Explorar determinantes en las diferencias entre países (PIB, OCDE, Indices digitales, etc...)
-
--   Cruzar datos con otras evaluaciones de gran escala (ICILS, SIMCE, TIMSS)
-:::
-
-# Gracias!
-
--   **Sitio web NUDOS:** [www.nudos.cl](https://www.nudos.cl/)
--   **Repositorio GitHub del proyecto:** <https://github.com/milenio-nudos/pisa_study_cl>
 
 # Referencias bibliográficas

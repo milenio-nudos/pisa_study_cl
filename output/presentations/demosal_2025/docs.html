@@ -144,6 +144,8 @@
 
   <link href="docs_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
+  <link href="docs_files/libs/table1-1.0/table1_defaults.css" rel="stylesheet">
+
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -546,6 +548,143 @@ lógicos, como un algoritmo.</td>
 
 <img data-src="docs_files/figure-revealjs/unnamed-chunk-8-1.png" width="960" class="r-stretch"></section></section>
 <section>
+<section id="descripción-variables-autoeficacia" class="title-slide slide level1 center">
+<h1>Descripción variables autoeficacia</h1>
+
+</section>
+<section id="concentración-de-respuestas" class="slide level2">
+<h2>Concentración de respuestas</h2>
+
+<img data-src="docs_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"></section>
+<section id="concentración-de-respuestas-1" class="slide level2">
+<h2>Concentración de respuestas</h2>
+
+<img data-src="docs_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<section id="descriptivos-generales" class="slide level2">
+<h2>Descriptivos generales</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="Rtable1"><table class="Rtable1-zebra"><caption>Tabla 1: Estadísticos Descriptivos índice</caption>
+
+<thead>
+<tr>
+<th class="rowlabel firstrow lastrow"></th>
+<th class="firstrow lastrow"><span class="stratlabel">Overall<br><span class="stratn">(N=393607)</span></span></th>
+</tr>
+</thead><tfoot><tr><td colspan="2" class="Rtable1-footnote"><p>Fuente: Elaboración propia con datos de PISA.</p>
+</td></tr></tfoot>
+
+<tbody>
+<tr>
+<td class="rowlabel firstrow">effgen</td>
+<td class="firstrow"></td>
+</tr>
+<tr>
+<td class="rowlabel">Mean (SD)</td>
+<td>3.27 (0.728)</td>
+</tr>
+<tr>
+<td class="rowlabel">Median [Min, Max]</td>
+<td>3.40 [1.00, 4.00]</td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">Missing</td>
+<td class="lastrow">76895 (19.5%)</td>
+</tr>
+<tr>
+<td class="rowlabel firstrow">effspec</td>
+<td class="firstrow"></td>
+</tr>
+<tr>
+<td class="rowlabel">Mean (SD)</td>
+<td>2.73 (0.917)</td>
+</tr>
+<tr>
+<td class="rowlabel">Median [Min, Max]</td>
+<td>3.00 [1.00, 4.00]</td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">Missing</td>
+<td class="lastrow">86163 (21.9%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="descriptivos-por-género" class="slide level2">
+<h2>Descriptivos por género</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="Rtable1"><table class="Rtable1-zebra"><caption>Tabla 1: Estadísticos Descriptivos índice: Comparación por sexo</caption>
+
+<thead>
+<tr>
+<th class="rowlabel firstrow lastrow"></th>
+<th class="firstrow lastrow"><span class="stratlabel">Female<br><span class="stratn">(N=195444)</span></span></th>
+<th class="firstrow lastrow"><span class="stratlabel">Male<br><span class="stratn">(N=198135)</span></span></th>
+<th class="firstrow lastrow"><span class="stratlabel">P-value</span></th>
+</tr>
+</thead><tfoot><tr><td colspan="4" class="Rtable1-footnote"><p>Fuente: Elaboración propia con datos de PISA.</p>
+</td></tr></tfoot>
+
+<tbody>
+<tr>
+<td class="rowlabel firstrow">effgen</td>
+<td class="firstrow"></td>
+<td class="firstrow"></td>
+<td class="firstrow"></td>
+</tr>
+<tr>
+<td class="rowlabel">Mean (SD)</td>
+<td>3.32 (0.695)</td>
+<td>3.22 (0.756)</td>
+<td>&lt;0.001</td>
+</tr>
+<tr>
+<td class="rowlabel">Median [Min, Max]</td>
+<td>3.50 [1.00, 4.00]</td>
+<td>3.33 [1.00, 4.00]</td>
+<td></td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">Missing</td>
+<td class="lastrow">36525 (18.7%)</td>
+<td class="lastrow">40361 (20.4%)</td>
+<td class="lastrow"></td>
+</tr>
+<tr>
+<td class="rowlabel firstrow">effspec</td>
+<td class="firstrow"></td>
+<td class="firstrow"></td>
+<td class="firstrow"></td>
+</tr>
+<tr>
+<td class="rowlabel">Mean (SD)</td>
+<td>2.65 (0.926)</td>
+<td>2.80 (0.902)</td>
+<td>&lt;0.001</td>
+</tr>
+<tr>
+<td class="rowlabel">Median [Min, Max]</td>
+<td>2.75 [1.00, 4.00]</td>
+<td>3.00 [1.00, 4.00]</td>
+<td></td>
+</tr>
+<tr>
+<td class="rowlabel lastrow">Missing</td>
+<td class="lastrow">41232 (21.1%)</td>
+<td class="lastrow">44922 (22.7%)</td>
+<td class="lastrow"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section></section>
+<section>
 <section id="modelos-de-regresión-multinivel" class="title-slide slide level1 center">
 <h1>Modelos de regresión Multinivel</h1>
 
@@ -667,11 +806,92 @@ lógicos, como un algoritmo.</td>
 <section id="efectos-entre-países" class="slide level2">
 <h2>Efectos entre-países</h2>
 
-<img data-src="docs_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"></section>
+<img data-src="docs_files/figure-revealjs/unnamed-chunk-14-1.png" width="960" class="r-stretch"></section>
 <section id="efectos-entre-países-1" class="slide level2">
 <h2>Efectos entre-países</h2>
 
-<img data-src="docs_files/figure-revealjs/unnamed-chunk-11-1.png" width="960" class="r-stretch"></section>
+<img data-src="docs_files/figure-revealjs/unnamed-chunk-15-1.png" width="960" class="r-stretch"></section>
+<section id="modelos-ocde" class="slide level2 smaller">
+<h2>Modelos OCDE</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table style="border-collapse:collapse; border:none;">
+<tbody><tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">&nbsp;</th>
+<th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effgen</th>
+<th colspan="2" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">effspec</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">Predictors</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">Estimates</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">CI</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">(Intercept)</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">3.20 <sup>***</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">3.15&nbsp;–&nbsp;3.26</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.69 <sup>***</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">2.62&nbsp;–&nbsp;2.76</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">factor(sex)2</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.11 <sup>***</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.12&nbsp;–&nbsp;-0.11</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.15 <sup>***</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.14&nbsp;–&nbsp;0.15</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">factor(OCDE)1</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.18 <sup>***</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">0.10&nbsp;–&nbsp;0.26</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.09 <sup></sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">-0.18&nbsp;–&nbsp;0.00</td>
+</tr>
+<tr>
+<td colspan="5" style="font-weight:bold; text-align:left; padding-top:.8em;">Random Effects</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">σ<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.50</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.81</td>
+</tr>
+
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">τ<sub>00</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.02 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.03 <sub>CNTRYID</sub></td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">ICC</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.04</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.03</td>
+
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">N</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">52 <sub>CNTRYID</sub></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">52 <sub>CNTRYID</sub></td>
+</tr><tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">Observations</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2">316693</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="2">307425</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">Marginal R<sup>2</sup> / Conditional R<sup>2</sup></td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.020 / 0.058</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="2">0.009 / 0.042</td>
+</tr>
+<tr>
+<td colspan="5" style="font-style:italic; border-top:double black; text-align:right;">* p&lt;0.05&nbsp;&nbsp;&nbsp;** p&lt;0.01&nbsp;&nbsp;&nbsp;*** p&lt;0.001</td>
+</tr>
+
+</tbody></table>
+
+</div>
+</div>
+</section>
 <section id="discusión" class="slide level2">
 <h2>Discusión</h2>
 <div class="highlight-last" style="font-size: 130%;">

@@ -1,6 +1,6 @@
 ---
 pagetitle: "Diferencias de género en la autoeficacia digital en la escuela en 52 países"
-Author: Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar, Tomás Urzúa
+Author: Daniel Miranda, Nicolas Tobar, Tomás Urzúa, Ismael Aguayo y Juan Carlos Castillo
 bibliography: ../../../input/bib/icils_nudos.bib
 csl: ../../../input/bib/apa.csl
 
@@ -39,20 +39,20 @@ options(digits = 2)
 rm(list = ls()) 
 
 variables_labels <- c(
-                 "Buscar y encontrar información relevante en Internet",
-                 "Evalúe la calidad de la información que ha encontrado en Internet",
-                 "Compartir información práctica con un grupo de estudiantes", 
-                 "Colaborar con otros estudiantes en una tarea de grupo",
-                 "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
-                 "Escribir o editar un texto para un trabajo escolar",
-                 "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).",
-                 "Crear una presentación multimedia (con sonido, imágenes o vídeo)",
-                 "Crear, actualizar y mantener una página web o un blog",
-                 "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
-                 "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta",
-                 "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])",
-                 "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.",
-                 "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.")
+                 "buscar_info",
+                 "evaluar_info",
+                 "compartir_info", 
+                 "colaboracion_pares",
+                 "explicar_info_pares",
+                 "editar_texto",
+                 "manejar_datos",
+                 "crear_presentacion",
+                 "manejar_pag_web",
+                 "configuracion_privacidad",
+                 "selecc_mejor_app",
+                 "crear_programa",
+                 "hallar_error_programa",
+                 "representar_solucion_logica")
 
 pisa22ict <- readRDS("../../../input/proc_data/pisa22ict.rds")
 
@@ -62,20 +62,20 @@ pisa22ict <- pisa22ict|>
 
 # Recodificación de variables
 var_label(pisa22ict) <- list(
-  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
-  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
-  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
-  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
-  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
-  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
-  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
-  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
-  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
-  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
-  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
-  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
-  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
-  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."
+  IC183Q01JA = "buscar_info", 
+  IC183Q02JA = "evaluar_info", 
+  IC183Q03JA = "compartir_info", 
+  IC183Q04JA = "colaboracion_pares",
+  IC183Q05JA = "explicar_info_pares",
+  IC183Q07JA = "editar_texto", 
+  IC183Q08JA = "manejar_datos", 
+  IC183Q09JA = "crear_presentacion", 
+  IC183Q10JA = "manejar_pag_web",
+  IC183Q12JA = "configuracion_privacidad",
+  IC183Q13JA = "selecc_mejor_app", 
+  IC183Q14JA = "crear_programa", 
+  IC183Q15JA = "hallar_error_programa", 
+  IC183Q16JA = "representar_solucion_logica"
 )
 
 pisa22ict <- pisa22ict %>% 
@@ -139,7 +139,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 -   Competencias Digitales: "*Grado de conocimientos del funcionamiento y capacidades de las tecnologías para su uso seguro, crítico y responsable, que sirvan al individuo en ámbitos educativos, laborales y sociales*" [@falloonDigitalLiteracyDigital2020].
 
--   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@banduraPsychologyHumanAgency2006;@ulfert-blank_assessing_2022].
+-   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@banduraPsychologyHumanAgency2006; @ulfert-blank_assessing_2022].
 
 -   En contextos digitales, las brechas de competencia se cruzan con viejas desigualdades, y aparecen otras nuevas. La autoeficacia es un factor determinante en este ensamblaje [@dijk_digital_2020].
 
@@ -191,11 +191,15 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
 ::: {.column width="50%"}
 -   Cambiar la configuración de un dispositivo o aplicación para proteger mis datos y privacidad.
+
 -   Seleccionar el programa o app más eficiente que me permita realizar una tarea concreta.
+
 -   Crear, actualizar y mantener una página web o un blog.
 
 -   Crear un programa informático (por ejemplo en Scratch, Python, Java).
+
 -   Identificar el origen de un error en un afeter de software considerando una lista de causas potenciales.
+
 -   Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.
 :::
 :::::
@@ -213,7 +217,7 @@ sjmisc::descr(efficacy_variables,
       kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
 ```
 
-## Análisis factorial general {.smaller .scrollable}
+## Análisis factorial general {.illustration}
 
 ```{r}
 fac <- fa(r = efficacy_variables|> select(-CNT),
@@ -268,7 +272,8 @@ tabla_resultados %>%
   kable()
 ```
 
-## Distribución de cargas factoriales por país 
+## Distribución de cargas factoriales por país
+
 Autoeficacia General
 
 ```{r}
@@ -279,8 +284,10 @@ ggplot2::ggplot(tabla_resultados, aes(CargaFactor1, Variable)) +
         )
 ```
 
-## Distribución de cargas factoriales por país 
+## Distribución de cargas factoriales por país
+
 Autoeficacia Especializada
+
 ```{r}
 ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
         geom_point() +
@@ -288,7 +295,6 @@ ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
           color="#fe3057"
         )
 ```
-
 
 ```{r}
 #| output: false
@@ -303,20 +309,20 @@ tabla_display <- tabla_resultados %>%
   )%>%
   ungroup()%>%
   mutate(Variable = recode(Variable,
-  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
-  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
-  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
-  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
-  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
-  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
-  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
-  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
-  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
-  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
-  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
-  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
-  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
-  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."))%>%
+  IC183Q01JA = "buscar_info", 
+  IC183Q02JA = "evaluar_info", 
+  IC183Q03JA = "compartir_info", 
+  IC183Q04JA = "colaboracion_pares",
+  IC183Q05JA = "explicar_info_pares",
+  IC183Q07JA = "editar_texto", 
+  IC183Q08JA = "manejar_datos", 
+  IC183Q09JA = "crear_presentacion", 
+  IC183Q10JA = "manejar_pag_web",
+  IC183Q12JA = "configuracion_privacidad",
+  IC183Q13JA = "selecc_mejor_app", 
+  IC183Q14JA = "crear_programa", 
+  IC183Q15JA = "hallar_error_programa", 
+  IC183Q16JA = "representar_solucion_logica"))%>%
   mutate(type = c("Básica","Básica","Básica","Básica","Básica",
                   "Básica","Básica","Básica","Especializada",
                   "Básica","Básica","Especializada",
@@ -327,28 +333,28 @@ tabla_display |>
   kable()
 ```
 
-
 ## Distribución de cargas factoriales
+
 Proporción de países ajustados al modelo por variable
 
 ```{r}
 tabla_resultados|>
   count(Variable,modelo)|>
   mutate(Variable = recode(Variable,
-  IC183Q01JA = "Buscar y encontrar información relevante en Internet", 
-  IC183Q02JA = "Evalúe la calidad de la información que ha encontrado en Internet", 
-  IC183Q03JA = "Compartir información práctica con un grupo de estudiantes", 
-  IC183Q04JA = "Colaborar con otros estudiantes en una tarea de grupo",
-  IC183Q05JA = "Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.",
-  IC183Q07JA = "Escribir o editar un texto para un trabajo escolar", 
-  IC183Q08JA = "Recoger y registrar datos (por ejemplo, utilizando registradores de datos, [Microsoft® Access™], [Google® Forms], hojas de cálculo).", 
-  IC183Q09JA = "Crear una presentación multimedia (con sonido, imágenes o vídeo)", 
-  IC183Q10JA = "Crear, actualizar y mantener una página web o un blog",
-  IC183Q12JA = "Cambiar la configuración de un dispositivo o una aplicación para proteger mis datos y mi privacidad.",
-  IC183Q13JA = "Seleccionar el programa o app más eficaz que me permita realizar una tarea concreta", 
-  IC183Q14JA = "Crear un programa informático (por ejemplo, en [Scratch®], [Python®], [Java®])", 
-  IC183Q15JA = "Identificar el origen de un error en un programa informático tras considerar una lista de posibles causas.", 
-  IC183Q16JA = "Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo."))|>
+  IC183Q01JA = "buscar_info", 
+  IC183Q02JA = "evaluar_info", 
+  IC183Q03JA = "compartir_info", 
+  IC183Q04JA = "colaboracion_pares",
+  IC183Q05JA = "explicar_info_pares",
+  IC183Q07JA = "editar_texto", 
+  IC183Q08JA = "manejar_datos", 
+  IC183Q09JA = "crear_presentacion", 
+  IC183Q10JA = "manejar_pag_web",
+  IC183Q12JA = "configuracion_privacidad",
+  IC183Q13JA = "selecc_mejor_app", 
+  IC183Q14JA = "crear_programa", 
+  IC183Q15JA = "hallar_error_programa", 
+  IC183Q16JA = "representar_solucion_logica"))|>
   
 ggplot(aes(y = Variable, x = n, fill = modelo)) +
   geom_bar(position = "fill", stat = "identity") +
@@ -358,6 +364,7 @@ ggplot(aes(y = Variable, x = n, fill = modelo)) +
 ```
 
 ## Distribución de cargas factoriales
+
 Proporción de variables ajustadas al modelo por país
 
 ```{r}
@@ -411,7 +418,6 @@ table1::table1(~ effgen + effspec, data=pisa22ict, topclass="Rtable1-zebra", cap
 
 ```
 
-
 ## Descriptivos por género
 
 ```{r}
@@ -436,7 +442,6 @@ table1::table1(~ effgen + effspec | sex, data=pisa22ict|>drop_na(sex)|>mutate(se
 ```
 
 # Modelos de regresión Multinivel
-
 
 ## Tabla de resultados {.smaller}
 
@@ -473,7 +478,6 @@ sjPlot::tab_model(m2,m2a,m1,m1a,
 # Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
 ```
 
-
 ## Efectos entre-países
 
 ```{r}
@@ -506,7 +510,6 @@ sjPlot::tab_model(m3a,m3b,
                   digits =2)
 ```
 
-
 ## Discusión
 
 ::: {.incremental .highlight-last style="font-size: 130%;"}
@@ -524,7 +527,6 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
     -   Sí, pero depende del tipo de autoeficacia, así como del país en el que los estudiantes están insertos.
 :::
-
 
 ## Próximos pasos {data-background-color="black"}
 

@@ -232,7 +232,7 @@ datos_geneff <- pisa22ict |>
 
 # Generamos el gráfico
 
-plot_geneff <- pisa22ict |>
+pisa22ict |>
   group_by(CNT, sex) |>
   summarise(mean_geneff = mean(effgen, na.rm = TRUE)) |>
   ungroup() |>
@@ -253,18 +253,6 @@ plot_geneff <- pisa22ict |>
         axis.title.x = element_blank(),
         legend.position = "top")
 
-# En el gráfico, ahora posicionamos el texto a la derecha del valor mayor
-plot_geneff +
-  geom_text(
-    data = filter(datos_geneff, mostrar_etiqueta == TRUE),
-    aes(
-      y = CNT, 
-      x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
-      label = etiqueta
-    ),
-    hjust = -0.1,
-    size = 3.5
-  )
 
 # Para autoeficacia especializada 
 datos_speceff <- pisa22ict |>
@@ -285,7 +273,7 @@ datos_speceff <- pisa22ict |>
   mutate(posicion = row_number()) |>
   mutate(mostrar_etiqueta = posicion <= 3 | posicion > n() - 3)
 
-plot_speceff <- pisa22ict |>
+pisa22ict |>
   group_by(CNT, sex) |>
   summarise(mean_speceff = mean(effspec, na.rm = TRUE)) |>
   ungroup() |>
@@ -303,18 +291,6 @@ plot_speceff <- pisa22ict |>
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         legend.position = "top")
-
-plot_speceff +
-  geom_text(
-    data = filter(datos_speceff, mostrar_etiqueta == TRUE),
-    aes(
-      y = CNT, 
-      x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
-      label = etiqueta
-    ),
-    hjust = -0.1,
-    size = 3.5
-  )
 
 ## Versión solo América
 
@@ -356,12 +332,9 @@ plot_geneff_america <- latam_cleaveland |>
   theme_minimal() +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank(),
-        legend.position = "top")
-
-# En el gráfico, ahora posicionamos el texto a la derecha del valor mayor
-plot_geneff_america +
+        legend.position = "top") +
   geom_text(
-    data = filter(datos_geneff_america, mostrar_etiqueta == TRUE),
+    data = datos_geneff_america,
     aes(
       y = CNT, 
       x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
@@ -411,7 +384,7 @@ plot_speceff_america <- latam_cleaveland |>
 
 plot_speceff_america +
   geom_text(
-    data = filter(datos_speceff_america, mostrar_etiqueta == TRUE),
+    data = datos_speceff_america,
     aes(
       y = CNT, 
       x = valor_mayor + 0.01,  # Posicionar a la derecha del punto más alto
@@ -584,8 +557,8 @@ ggplot(datos_analisis, aes(x = HDI, y = brecha_general)) +
   geom_smooth(method = "lm", se = TRUE, color = "grey40") +
   geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
   labs(
-    title = "Relación entre brecha de autoeficacia general y HDI",
-    x = "Índice de Desarrollo Humano (HDI)",
+    title = "Relación entre brecha de autoeficacia general y IDH",
+    x = "Índice de Desarrollo Humano (IDH)",
     y = "Brecha de autoeficacia general (M-H)"
   ) +
   theme_minimal()

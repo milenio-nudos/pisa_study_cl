@@ -178,23 +178,72 @@ pisa22ict|>
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank())
 
+# Opción 4: visualizar solo los países de latinoamérica
 
+latam_cleaveland <- pisa22ict %>% 
+  filter(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY", "USA"))
     
+latam_cleaveland|>
+  group_by(CNT)|>
+  summarise(mean_speceff = mean(effspec, na.rm = T),
+            mean_geneff = mean(effgen, na.rm = T))|>
+  ungroup()|>
+  pivot_longer(cols = 2:3,
+               names_to = "type",
+               values_to = "score")|>
+  mutate(CNT = to_label(CNT))|>
+  
+  ggplot(aes(y = reorder(CNT, -score), x = score)) +
+  geom_line(aes(group = CNT), size = 0.8) +
+  geom_point(aes(color = type), size= 2.5) +
+  scale_color_manual(values = c("#fe3057","#5f5758"),
+                     labels = c("General", "Especializada") ) +
+  labs(title = "Puntajes en los tipos de Autoeficacia digital",
+       subtitle = "Promedios entre países",
+       color = "Tipo",
+       x = "Puntaje en la escala") +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "top")
+
 
 # 3. Promedio de autoeficacia básica por género entre países ----
 
-pisa22ict|>
-  group_by(CNT,sex)|>
-  summarise(mean_geneff = mean(effgen, na.rm = T))|>
-  ungroup()|>
+# Para autoeficacia general
+# Modificamos el cálculo de datos para determinar cuál valor es mayor
+datos_geneff <- pisa22ict |>
+  group_by(CNT, sex) |>
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE)) |>
+  ungroup() |>
   mutate(CNT = to_label(CNT),
-         sex = to_label(sex))|>
-  drop_na()|>
+         sex = to_label(sex)) |>
+  drop_na() |>
+  pivot_wider(names_from = sex, values_from = mean_geneff) |>
+  mutate(
+    diferencia = Female - Male,
+    porc_dif = round((diferencia / Male) * 100, 1),
+    etiqueta = ifelse(diferencia > 0, paste0("+", porc_dif, "%"), paste0(porc_dif, "%")),
+    valor_mayor = pmax(Male, Female)  # Determina cuál es el valor mayor
+  ) |>
+  arrange(Male) |>
+  mutate(posicion = row_number()) |>
+  mutate(mostrar_etiqueta = posicion <= 3 | posicion > n() - 3)
+
+# Generamos el gráfico
+
+plot_geneff <- pisa22ict |>
+  group_by(CNT, sex) |>
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
   
   ggplot(aes(y = reorder(CNT, mean_geneff), x = mean_geneff)) +
   geom_line(aes(group = CNT), size = 0.8) +
-  geom_point(aes(color = sex), size= 2.5) +
-  scale_color_manual(values = c("#fe3057","#5f5758")) +
+  geom_point(aes(color = sex), size = 2.5) +
+  scale_color_manual(values = c("#fe3057", "#5f5758")) +
   labs(title = "Diferencias de género en autoeficacia digital General",
        subtitle = "Promedios en cada país por género",
        color = "Género",
@@ -204,25 +253,174 @@ pisa22ict|>
         axis.title.x = element_blank(),
         legend.position = "top")
 
-pisa22ict|>
-  group_by(CNT,sex)|>
-  summarise(mean_speceff = mean(effspec, na.rm = T))|>
-  ungroup()|>
+# En el gráfico, ahora posicionamos el texto a la derecha del valor mayor
+plot_geneff +
+  geom_text(
+    data = filter(datos_geneff, mostrar_etiqueta == TRUE),
+    aes(
+      y = CNT, 
+      x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
+      label = etiqueta
+    ),
+    hjust = -0.1,
+    size = 3.5
+  )
+
+# Para autoeficacia especializada 
+datos_speceff <- pisa22ict |>
+  group_by(CNT, sex) |>
+  summarise(mean_speceff = mean(effspec, na.rm = TRUE)) |>
+  ungroup() |>
   mutate(CNT = to_label(CNT),
-         sex = to_label(sex))|>
-  drop_na()|>
+         sex = to_label(sex)) |>
+  drop_na() |>
+  pivot_wider(names_from = sex, values_from = mean_speceff) |>
+  mutate(
+    diferencia = Male - Female,
+    porc_dif = round((diferencia / Female) * 100, 1),
+    etiqueta = ifelse(diferencia > 0, paste0("+", porc_dif, "%"), paste0(porc_dif, "%")),
+    valor_mayor = pmax(Male, Female)  # Determina cuál es el valor mayor
+  ) |>
+  arrange(Female) |>
+  mutate(posicion = row_number()) |>
+  mutate(mostrar_etiqueta = posicion <= 3 | posicion > n() - 3)
+
+plot_speceff <- pisa22ict |>
+  group_by(CNT, sex) |>
+  summarise(mean_speceff = mean(effspec, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
   
   ggplot(aes(y = reorder(CNT, mean_speceff), x = mean_speceff)) +
   geom_line(aes(group = CNT), size = 0.8) +
-  geom_point(aes(color = sex), size= 2.5) +
-  scale_color_manual(values = c("#fe3057","#5f5758")) +
+  geom_point(aes(color = sex), size = 2.5) +
+  scale_color_manual(values = c("#fe3057", "#5f5758")) +
   labs(title = "Diferencias de género en autoeficacia digital Especializada",
        subtitle = "Promedios en cada país por género") +
   theme_minimal() +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank(),
         legend.position = "top")
+
+plot_speceff +
+  geom_text(
+    data = filter(datos_speceff, mostrar_etiqueta == TRUE),
+    aes(
+      y = CNT, 
+      x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
+      label = etiqueta
+    ),
+    hjust = -0.1,
+    size = 3.5
+  )
+
+## Versión solo América
+
+# Modificamos el cálculo de datos para determinar cuál valor es mayor
+datos_geneff_america <- latam_cleaveland |>
+  group_by(CNT, sex) |>
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
+  pivot_wider(names_from = sex, values_from = mean_geneff) |>
+  mutate(
+    diferencia = Female - Male,
+    porc_dif = round((diferencia / Male) * 100, 1),
+    etiqueta = ifelse(diferencia > 0, paste0("+", porc_dif, "%"), paste0(porc_dif, "%")),
+    valor_mayor = pmax(Male, Female)  # Determina cuál es el valor mayor
+  ) |>
+  arrange(Male) |>
+  mutate(posicion = row_number()) |>
+  mutate(mostrar_etiqueta = posicion <= 3 | posicion > n() - 3)
+
+plot_geneff_america <- latam_cleaveland |>
+  group_by(CNT, sex) |>
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
   
+  ggplot(aes(y = reorder(CNT, mean_geneff), x = mean_geneff)) +
+  geom_line(aes(group = CNT), size = 0.8) +
+  geom_point(aes(color = sex), size = 2.5) +
+  scale_color_manual(values = c("#fe3057", "#5f5758")) +
+  labs(title = "Diferencias de género en autoeficacia digital General",
+       subtitle = "Promedios en cada país por género",
+       color = "Género",
+       x = "Puntaje en la escala") +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "top")
+
+# En el gráfico, ahora posicionamos el texto a la derecha del valor mayor
+plot_geneff_america +
+  geom_text(
+    data = filter(datos_geneff_america, mostrar_etiqueta == TRUE),
+    aes(
+      y = CNT, 
+      x = valor_mayor + 0.02,  # Posicionar a la derecha del punto más alto
+      label = etiqueta
+    ),
+    hjust = -0.1,
+    size = 3.5
+  )
+
+# Para autoeficacia especializada
+datos_speceff_america <- latam_cleaveland |>
+  group_by(CNT, sex) |>
+  summarise(mean_speceff = mean(effspec, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
+  pivot_wider(names_from = sex, values_from = mean_speceff) |>
+  mutate(
+    diferencia = Male - Female,
+    porc_dif = round((diferencia / Female) * 100, 1),
+    etiqueta = ifelse(diferencia > 0, paste0("+", porc_dif, "%"), paste0(porc_dif, "%")),
+    valor_mayor = pmax(Male, Female)  # Determina cuál es el valor mayor
+  ) |>
+  arrange(Female) |>
+  mutate(posicion = row_number()) |>
+  mutate(mostrar_etiqueta = posicion <= 3 | posicion > n() - 3)
+
+plot_speceff_america <- latam_cleaveland |>
+  group_by(CNT, sex) |>
+  summarise(mean_speceff = mean(effspec, na.rm = TRUE)) |>
+  ungroup() |>
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) |>
+  drop_na() |>
+  
+  ggplot(aes(y = reorder(CNT, mean_speceff), x = mean_speceff)) +
+  geom_line(aes(group = CNT), size = 0.8) +
+  geom_point(aes(color = sex), size = 2.5) +
+  scale_color_manual(values = c("#fe3057", "#5f5758")) +
+  labs(title = "Diferencias de género en autoeficacia digital Especializada",
+       subtitle = "Promedios en cada país por género") +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        legend.position = "top")
+
+plot_speceff_america +
+  geom_text(
+    data = filter(datos_speceff_america, mostrar_etiqueta == TRUE),
+    aes(
+      y = CNT, 
+      x = valor_mayor + 0.01,  # Posicionar a la derecha del punto más alto
+      label = etiqueta
+    ),
+    hjust = -0.1,
+    size = 3.5
+  )
+
 # 4. Promedio de la magnitud de brechas de género por país ----
 
 # Calculate the wide-format data and mean_gap
@@ -249,7 +447,9 @@ ggplot(wide_data, aes(y = reorder(CNT,-gap), x = gap)) +
   geom_point(aes(group = CNT), size = 3, color = "#fe3057") + # Add points
   geom_vline(xintercept = mean_gap_value, color = "#5f5758", linetype = "dashed", size = 1) + # Add mean_gap line
   labs(
-    title = "Magnitud de la brecha de género en autoeficacia general por país",
+    title = "Magnitud de la brecha de género en 
+    autoeficacia general por país
+    ",
   ) +
   theme_minimal() +
   theme(axis.title.y = element_blank(),
@@ -268,7 +468,7 @@ wide_data <- pisa22ict %>%
     values_from = mean_spec, # Column to use for values
     names_glue = "score_of_{sex}" # Customize new column names
   ) %>%
-  mutate(gap = score_of_Male - score_of_Female) %>%
+  mutate(gap = score_of_Female - score_of_Male) %>%
   mutate(mean_gap = mean(gap)) # Calculate mean_gap
 
 # Extract the mean_gap value
@@ -279,10 +479,202 @@ ggplot(wide_data, aes(y = reorder(CNT,-gap), x = gap)) +
   geom_point(aes(group = CNT), size = 3, color = "#fe3057") + # Add points
   geom_vline(xintercept = mean_gap_value, color = "#5f5758", linetype = "dashed", size = 1) + # Add mean_gap line
   labs(
-    title = "Magnitud de la brecha de género en autoeficacia general por país",
+    title = "Magnitud de la brecha de género en autoeficacia 
+    específica por país",
   ) +
   theme_minimal() +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank())
 
 # 5. Scatterplots variables país (ISMA)
+
+#library(remotes)
+#remotes::install_github("ropengov/rqog")
+#library(rqog)
+
+#test <- read_qog(which_data="standard", data_type = "cross-sectional")
+
+#test <- filter(test, year == 2022)
+
+#hdi <- test %>% 
+#  select(iiag_hd)
+
+
+#ggplot(test[!is.na(test$undp_hdi),], 
+#       aes(x = year, y = undp_hdi, color = cname)) + 
+#  geom_line() + 
+#  theme(legend.position = "none")
+
+library(readxl)
+
+HDI <- readxl::read_excel("./index/HDI.xlsx")
+GDI <- readxl::read_excel("./index/GDI.xlsx")
+GII <- readxl::read_excel("./index/GII.xlsx")
+
+
+country_codes <- unique(pisa22ict$CNT)
+
+hdi_filtered <- HDI %>%
+  filter(countryIsoCode %in% country_codes) %>%
+  select(HDI = value, CNT = countryIsoCode)
+
+gdi_filtered <- GDI %>%
+  filter(countryIsoCode %in% country_codes) %>%
+  select(CNT = countryIsoCode, GDI = value)
+
+gii_filtered <- GII %>%
+  filter(countryIsoCode %in% country_codes) %>%
+  select(CNT = countryIsoCode, GII = value)
+
+scatter_data <- pisa22ict %>%
+  left_join(hdi_filtered, by = "CNT") %>%
+  left_join(gdi_filtered, by = "CNT") %>% 
+  left_join(gii_filtered, by = "CNT")
+
+
+# 1. Calcular brechas de autoeficacia general
+brecha_general <- pisa22ict %>%
+  # Verificar los valores únicos de sex
+  # (Asegúrate que sean exactamente "Male" y "Female" o sus códigos numéricos)
+  group_by(CNT, sex) %>%
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE), .groups = 'drop') %>%
+  # Si sex es numérico, convertir a factor con etiquetas
+  mutate(sex = case_when(
+    sex == 1 ~ "Female",
+    sex == 2 ~ "Male",
+    TRUE ~ as.character(sex)
+  )) %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = mean_geneff
+  ) %>%
+  # Calcular brecha (usa los nombres exactos de las columnas creadas por pivot_wider)
+  mutate(brecha_general = Female - Male) %>%
+  select(CNT, brecha_general)
+
+# 2. Calcular brechas de autoeficacia específica
+brecha_especifica <- pisa22ict %>%
+  group_by(CNT, sex) %>%
+  summarise(mean_spec = mean(effspec, na.rm = TRUE), .groups = 'drop') %>%
+  # Si sex es numérico, convertir a factor con etiquetas
+  mutate(sex = case_when(
+    sex == 1 ~ "Female",
+    sex == 2 ~ "Male",
+    TRUE ~ as.character(sex)
+  )) %>%
+  pivot_wider(
+    names_from = sex,
+    values_from = mean_spec
+  ) %>%
+  # Calcular brecha (usa los nombres exactos de las columnas creadas por pivot_wider)
+  mutate(brecha_especifica = Female - Male) %>%
+  select(CNT, brecha_especifica)
+
+# 3. Unir las brechas y los índices
+datos_analisis <- brecha_general %>%
+  left_join(brecha_especifica, by = "CNT") %>%
+  left_join(gdi_filtered, by = "CNT") %>%
+  left_join(hdi_filtered, by = "CNT") %>% 
+  left_join(gii_filtered, by = "CNT")
+
+
+# Brecha general vs. HDI
+ggplot(datos_analisis, aes(x = HDI, y = brecha_general)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia general y HDI",
+    x = "Índice de Desarrollo Humano (HDI)",
+    y = "Brecha de autoeficacia general (M-H)"
+  ) +
+  theme_minimal()
+
+# Brecha específica y HDI
+
+ggplot(datos_analisis, aes(x = HDI, y = brecha_especifica)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia especifica y HDI",
+    x = "Índice de Desarrollo Humano (HDI)",
+    y = "Brecha de autoeficacia especifica (H-M)"
+  ) +
+  theme_minimal()
+
+# 6. Crear scatterplot sencillo - Brecha general vs. GDI
+ggplot(datos_analisis, aes(x = GDI, y = brecha_general)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia general y GDI",
+    x = "Gender Development Index (GDI)",
+    y = "Brecha de autoeficacia general (M-H)"
+  ) +
+  theme_minimal()
+
+# Brecha específica y GDI
+
+ggplot(datos_analisis, aes(x = GDI, y = brecha_especifica)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia especifica y GDI",
+    x = "Gender Development Index (GDI)",
+    y = "Brecha de autoeficacia general (M-H)"
+  ) +
+  theme_minimal()
+
+# GII y brechas
+
+ggplot(datos_analisis, aes(x = GII, y = brecha_general)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia general y GDI",
+    x = "Gender Inequality Index (GII)",
+    y = "Brecha de autoeficacia general (M-H)"
+  ) +
+  theme_minimal()
+
+ggplot(datos_analisis, aes(x = GII, y = brecha_especifica)) +
+  geom_point(color = "#fe3057", size = 3) +
+  geom_smooth(method = "lm", se = TRUE, color = "grey40") +
+  geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
+  labs(
+    title = "Relación entre brecha de autoeficacia especifica y GII",
+    x = "Gender Inequality Index (GII)",
+    y = "Brecha de autoeficacia especifica (M-H)"
+  ) +
+  theme_minimal()
+
+# Corrplots
+
+library(corrplot)
+library(grDevices)
+library(Hmisc)
+library(viridis)
+# Asumiendo que ya tienes tus datos con las brechas y los índices en datos_analisis
+# Seleccionar solo las columnas que quieres incluir en la correlación
+mat_X <- datos_analisis %>%
+  select(brecha_general, brecha_especifica, GII, HDI, GDI)
+
+# Calcular la matriz de correlación
+Mat_R <- rcorr(as.matrix(mat_X))
+
+# Opciones de paletas de colores que incluyen magenta:
+
+# 1. Opción con magenta a púrpura
+corrplot(Mat_R$r,
+         p.mat = Mat_R$r,
+         type="lower",
+         tl.col="black",
+         tl.srt = 90,
+         pch.col = "black",
+         insig = "p-value",
+         sig.level = -1,
+         col = heat.colors(11))

@@ -3,5 +3,9 @@
     "Source": "Source",
     "cursorPosition": "2,0",
     "scrollLine": "0",
-    "docOutlineVisible": "0"
+    "docOutlineVisible": "0",
+    "rmdVisualMode": "true",
+    "rmdVisualWrapConfigured": "true",
+    "rmdVisualCollapsedChunks": "",
+    "rmdVisualModeLocation": "56:0"
 }

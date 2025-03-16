@@ -331,8 +331,8 @@ pisa22ict |>
   
   ggplot(aes(y = reorder(CNT, score), x = score)) +
   facet_grid(~type) +
-  geom_line(aes(group = CNT), size = 0.8) +
-  geom_point(aes(color = sex), size = 2.5) +
+  geom_line(aes(group = CNT), size = 0.5) +
+  geom_point(aes(color = sex), size = 1.5) +
   scale_color_manual(values = c("#fe3057", "#5f5758")) +
   labs(title = "Promedios en cada país por género",
        color = "Género") +

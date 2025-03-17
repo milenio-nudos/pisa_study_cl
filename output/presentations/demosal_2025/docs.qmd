@@ -109,7 +109,7 @@ latam_cleaveland <- pisa22ict %>%
 
 ------------------------------------------------------------------------
 
-Daniel Miranda, Nicolas Tobar, Ismael Aguayo, Tomás Urzúa & Juan Carlos Castillo
+Daniel Miranda, Nicolas Tobar, Tomás Urzúa, Ismael Aguayo & Juan Carlos Castillo
 
 #### Universidad de Chile & Núcleo Milenio de Desigualdades y Oportunidades Digitales (*nudos.cl*)
 
@@ -139,7 +139,31 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ## Equipo
 
-Insertar foto de cada uno
+<style>
+  .image-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+  }
+  .circular-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc; /* Color del borde */
+  }
+</style>
+
+<div class="image-container">
+  <img src="images/d_miranda.jpg" class="circular-image" />
+  <img src="images/n_tobar.jpg" class="circular-image" />
+  <img src="images/jc_castillo.jpg" class="circular-image" />
+</div>
+
+<div class="image-container">
+  <img src="images/i_aguayo.jpg" class="circular-image" />
+  <img src="images/t_urzua.jpg" class="circular-image" />
+</div>
 
 ## Punto de inicio
 
@@ -178,7 +202,8 @@ H<sub>2</sub>. Las mujeres tienden a presentar mayores niveles de autoeficacia d
 H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
 
 ## Datos
-![](images/pisa-ocde.jpg){width=5%}
+
+![](images/pisa-ocde.jpg){width="5%"}
 
 -   PISA: Programa para la Evaluación Internacional de Estudiantes (OCDE).
 -   Cuestionario de familiaridad con TIC.
@@ -210,7 +235,8 @@ Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con 
 
 # Resultados {data-background-color="#5f5758"}
 
-##
+## 
+
 #### Autoeficacia Digital entre países
 
 ```{r}
@@ -251,8 +277,8 @@ ggplot(beeswarm_plot, aes(y = score, x = type, color = type)) +
   scale_x_discrete(labels = c("1. Autoeficacia General", "2. Autoeficacia Especializada"))
 ```
 
+## 
 
-##
 #### Autoeficacia Digital en América Latina
 
 ```{r}
@@ -316,8 +342,8 @@ ggplot(data, aes(y = reorder(CNT, posicion), x = score)) +
 
 ```
 
+## 
 
-##
 #### Brechas de Género entre países
 
 ```{r}
@@ -358,7 +384,9 @@ pisa22ict |>
   ) +
   coord_cartesian(clip = "off")
 ```
-##
+
+## 
+
 #### Brechas de género en América Latina
 
 ```{r}
@@ -445,6 +473,7 @@ geom_text(
 ```
 
 ## 
+
 #### Correlación: Índice Internacional de Desigualdades de Género
 
 ```{r proc corr}
@@ -565,13 +594,13 @@ ggplot(datos_analisis, aes(x = GDI, y = score)) +
         strip.text = element_text(size=12))
 ```
 
-##
-#### Correlación: Índice  de Desarrollo Tecnológico
+## 
+
+#### Correlación: Índice de Desarrollo Tecnológico
 
 ```{r}
 # Aquí Isma
 ```
-
 
 ## Discusión
 
@@ -605,6 +634,5 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
 -   **Sitio web NUDOS:** [www.nudos.cl](https://www.nudos.cl/)
 -   **Repositorio GitHub del proyecto:** <https://github.com/milenio-nudos/pisa_study_cl>
-
 
 # Referencias bibliográficas

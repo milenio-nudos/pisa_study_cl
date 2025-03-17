@@ -112,11 +112,11 @@ latam_cleaveland <- pisa22ict %>%
 
 ------------------------------------------------------------------------
 
-Juan Carlos Castillo, Daniel Miranda, Nicolas Tobar, Ismael Urzúa & Tomás Urzúa
+Daniel Miranda, Nicolas Tobar, Ismael Aguayo, Tomás Urzúa & Juan Carlos Castillo
 
 #### Universidad de Chile & Núcleo Milenio de Desigualdades y Oportunidades Digitales (*nudos.cl*)
 
-VIII Seminario Internacional de Desigualdad y Movilidad Social en América Latina- Río de Janeiro 24, 25 y 26 de marzo
+VIII Seminario Internacional de Desigualdad y Movilidad Social en América Latina - Río de Janeiro 24, 25 y 26 de marzo
 :::
 :::::
 
@@ -140,22 +140,28 @@ Esta ponencia trata principalmente de las desigualdades digitales en la educaci�
 Un poco de contexto: esta investigación forma parte de un proyecto de investigación sobre Desigualdades y Oportunidades Digitales (proyecto NUDOS) en el que estamos cubriendo áreas como la conectividad, la educación y la política con un amplio equipo de investigadores, más información en nuestra web.
 :::
 
+## Equipo
+
+Insertar foto de cada uno
+
 ## Punto de inicio
 
--   Competencias Digitales: "*Grado de conocimientos del funcionamiento y capacidades de las tecnologías para su uso seguro, crítico y responsable, que sirvan al individuo en ámbitos educativos, laborales y sociales*" [@falloonDigitalLiteracyDigital2020].
+::: {.incremental .highlight-last style="font-size: 110%;"}
+-   La digitalidad se puede comprender como un fenómeno multidimensional en tanto interactúa constantemente con las esferas económica, social, política y cultural [@ramirez-castaneda_brecha_2018; @camacho_brecha_2005].
 
--   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@banduraPsychologyHumanAgency2006; @ulfert-blank_assessing_2022].
+-   Existen brechas digitales en relación al acceso de dispositivos digitales, pero últimamente ha cobrado relevancia la brecha digital en torno a **los conocimientos y habilidades** que son necesarios para desenvolverse adecuadamente en entornos digitales [@sunkel_integracion_2014].
 
--   En contextos digitales, las brechas de competencia se cruzan con viejas desigualdades, y aparecen otras nuevas. La autoeficacia es un factor determinante en este ensamblaje [@dijk_digital_2020].
+-   En contextos digitales, las brechas de competencia se cruzan con viejas desigualdades, y aparecen otras nuevas. La **autoeficacia** es un factor determinante en este ensamblaje [@dijk_digital_2020].
+:::
 
 ## Autoeficacia Digital y Género
 
-::: {.incremental .highlight-last style="font-size: 130%;"}
--   Las diferencias de género en el uso de las TIC's se ha **atenuado** durante el tiempo [@hargittaiDifferencesActualPerceived2006].
+::: {.incremental .highlight-last style="font-size: 110%;"}
+-   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@bandura_psychology_2006; @ulfert-blank_assessing_2022a].
 
--   Las estudiantes mujeres tienden a presentar menores niveles de confianza pero mayores competencias que los hombres [@punterGenderDifferencesComputer2017].
+-   Las diferencias de género en el uso de las TIC's se han **atenuado** durante el tiempo [@hargittai_differences_2006].
 
--   La brecha de género en autoeficacia se produce principalmente en las tareas especializadas o avanzadas (Por sobre las generales o básicas)[@tomteGenderdifferencesSelfefficacyICT2011].
+-   Las estudiantes mujeres tienden a presentar menores niveles de confianza pero mayores competencias que los hombres [@punter_gender_2017].
 :::
 
 ##  {data-background-color="#5f5758"}
@@ -174,11 +180,12 @@ H<sub>2</sub>. Las mujeres tienden a presentar mayores niveles de autoeficacia d
 
 H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
 
-# Datos {data-background-color="#5f5758"}
+## Datos
+![](images/pisa-ocde.jpg){width=5%}
 
--   OCDE: Programa para la Evaluación internacional de estudiantes (PISA).
--   `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` paises.
--   Marco de trabajo Tecnologías de la Información y Comunicación.
+-   PISA: Programa para la Evaluación Internacional de Estudiantes (OCDE).
+-   Ciclo 2022: `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` países.
+-   Cuestionario de familiaridad con TIC.
 
 ## Mediciones de autoeficacia {.smaller}
 
@@ -187,25 +194,16 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 ::::: columns
 ::: {.column width="50%"}
 -   Buscar y encontrar información relevante en Internet.
--   Evaluar la calidad de la información que has encontrado en Internet.
--   Compartir información práctica con un grupo de estudiantes.
--   Colaborar con otros estudiantes en una evaluación en grupo.
--   Explicar a otros alumnos cómo compartir contenidos digitales en línea o en una plataforma escolar.
+
 -   Redactar o editar un texto para una tarea escolar.
--   Recopilar y registrar datos (por ejemplo, utilizando registradores de datos, Microsoft Access, Google form, hojas de cálculo).
+
 -   Crear una presentación multimedia (con sonido, imágenes y vídeo).
 :::
 
 ::: {.column width="50%"}
--   Cambiar la configuración de un dispositivo o aplicación para proteger mis datos y privacidad.
-
 -   Seleccionar el programa o app más eficiente que me permita realizar una tarea concreta.
 
--   Crear, actualizar y mantener una página web o un blog.
-
 -   Crear un programa informático (por ejemplo en Scratch, Python, Java).
-
--   Identificar el origen de un error en un afeter de software considerando una lista de causas potenciales.
 
 -   Desglosar un problema y representar una solución como una serie de pasos lógicos, como un algoritmo.
 :::
@@ -313,6 +311,7 @@ ggplot(data, aes(y = reorder(CNT, posicion), x = score)) +
   )
 
 ```
+
 ## Diferencias por género
 
 ```{r}
@@ -423,7 +422,6 @@ geom_text(
   show.legend = FALSE
 )
 ```
-
 
 ## Magnitud de la brecha de género
 
@@ -987,6 +985,5 @@ sjPlot::tab_model(m3a,m3b,
                   show.se = FALSE,
                   digits =2)
 ```
-
 
 # Referencias bibliográficas

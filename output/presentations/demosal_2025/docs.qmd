@@ -30,7 +30,7 @@ editor: visual
 pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2,
                parameters, table1, beeswarm, lme4, rio, skimr, effects,
                labelled, knitr, kableExtra, stringr, sjmisc, purr, ggbeeswarm,
-               sjlabelled, ggrepel,forcats)
+               sjlabelled, ggrepel,forcats,ggpubr)
 
 options(scipen = 999) 
 options(digits = 2)
@@ -89,8 +89,9 @@ efficacy_variables <- pisa22ict |>
 latam_cleaveland <- pisa22ict %>% 
   filter(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY"))
 
-
-
+pisa22ict <- pisa22ict %>%
+  mutate(latam = ifelse(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY"),1,0))
+  
 ```
 
 ::::: columns
@@ -238,6 +239,13 @@ Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con 
 
 #### Autoeficacia Digital entre países
 
+::: notes
+
+-   Los puntajes en autoeficacia general tienden a ser más altos.
+-   En autoeficacia especializada los primeros puestos son contra-intuitivos.
+
+:::
+
 ```{r}
 beeswarm_plot <- pisa22ict|>
   group_by(CNT)|>
@@ -280,6 +288,13 @@ ggplot(beeswarm_plot, aes(y = score, x = type, color = type)) +
 
 #### Autoeficacia Digital en América Latina
 
+::: notes
+
+-   No hay un comportamiento asimilable entre las dos autoeficacias dentro de cada país. A veces los que puntuan alto en General, no lo hacen en especializada.
+-   Chile y Uruguay como los países con mejor desempeño en ambas autoeficacias.
+
+:::
+
 ```{r}
 # Calculate mean_speceff and mean_geneff by country
 data <- latam_cleaveland %>%
@@ -315,7 +330,7 @@ ggplot(data, aes(y = reorder(CNT, posicion), x = score)) +
   geom_point(aes(color = type), size = 2.5) +
   facet_wrap(
     ~type, 
-    nrow = 2, 
+    nrow =2, 
     scales = "free_y", # Allow y-axis to be independent
     labeller = labeller(type = facet_labels) # Custom facet labels
   ) +
@@ -345,16 +360,25 @@ ggplot(data, aes(y = reorder(CNT, posicion), x = score)) +
 
 #### Brechas de Género entre países
 
-```{r}
-#| fig-width: 15
-#| fig-height: 9
-#| out-width: "150%"
-#| out-height: "150%"
+::: notes
+-   En general tienden a ganar hombres, en especializada mujeres.
+-   Hay unos cuantos casos excepcionales para ambas autoeficacias, pero cuando gana el sexo opuesto las brechas son minúsculas.
+-   Las brechas de género son mayores en la especializada.
+-   Los países latinoamericanos suelen estar bajo la media.
+:::
 
-pisa22ict |>  
+```{r}
+# Add the latam column to the data (assuming it exists in pisa22ict)
+pisa22ict <- pisa22ict %>%
+  mutate(latam = ifelse(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY"), 1, 0))
+
+# Prepare the data for plotting
+plot_data <- pisa22ict |>  
   group_by(CNT, sex) |>  
-  summarise("1. Autoeficacia General" = mean(effgen, na.rm = TRUE),
-            "2. Autoeficacia Especializada" = mean(effspec, na.rm = TRUE)) |>  
+  summarise(
+    "1. Autoeficacia General" = mean(effgen, na.rm = TRUE),
+    "2. Autoeficacia Especializada" = mean(effspec, na.rm = TRUE)
+  ) |>  
   pivot_longer(
     cols = 3:4,
     names_to = "type",
@@ -362,31 +386,71 @@ pisa22ict |>
   ) |>  
   ungroup() |>  
   mutate(sex = to_label(sex)) |>  
-  drop_na() |>  
-  ggplot(aes(y = reorder(CNT, score), x = score)) +  
-  facet_grid(~type) +  
-  geom_line(aes(group = CNT), size = 0.7) +  
-  geom_point(aes(color = sex), size = 4) +  
-  scale_color_manual(values = c("#FE3057", "#5F5758")) +  
-  labs(color = "Género") +  
-  theme_minimal() +  
-  theme(
-    axis.title.y = element_blank(),
-    axis.title.x = element_blank(),
-    legend.position = "top",
-    axis.text.y = element_text(size = 13),
-    plot.margin = margin(0, 0, 0, 0),
-    panel.spacing = unit(1, "lines"),
-    text = element_text(size = 14),
-    strip.text = element_text(size = 16),
-    legend.text = element_text(size = 15)
-  ) +
-  coord_cartesian(clip = "off")
+  drop_na()
+
+# Split the data into two datasets: one for each type
+plot_data_general <- plot_data %>% filter(type == "1. Autoeficacia General")
+plot_data_specialized <- plot_data %>% filter(type == "2. Autoeficacia Especializada")
+
+# Function to create a plot for a given type
+create_plot <- function(data, title) {
+  # Reorder the data by score
+  data <- data %>%
+    arrange(score) %>%
+    mutate(CNT = factor(CNT, levels = unique(CNT)))
+  
+  # Create a vector of colors for the y-axis text
+  unique_countries <- levels(data$CNT)
+  y_axis_colors <- ifelse(unique_countries %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY"), "#FE3057", "#5F5758")
+  
+  # Create the plot
+  ggplot(data, aes(y = CNT, x = score)) +
+    geom_line(aes(group = CNT), size = 0.6) +
+    geom_point(aes(color = sex), size = 2) +
+    scale_color_manual(values = c("#FE3057", "#5F5758")) +
+    labs(
+      title = title,
+      color = "Género"
+    ) +
+    theme_minimal() +
+    theme(
+      axis.title.y = element_blank(),
+      axis.title.x = element_blank(),
+      legend.position = "top",
+      axis.text.y = element_text(size = 6, color = y_axis_colors),
+      plot.margin = margin(0, 0, 0, 0),
+      panel.spacing = unit(1, "lines"),
+      text = element_text(size = 10),
+      strip.text = element_text(size = 14),
+      legend.text = element_text(size = 12)
+    ) +
+    coord_cartesian(clip = "off")
+}
+
+# Create the two plots
+plot_general <- create_plot(plot_data_general, "1. Autoeficacia General")
+plot_specialized <- create_plot(plot_data_specialized, "2. Autoeficacia Especializada")
+
+# Combine the plots using ggarrange
+combined_plot <- ggarrange(
+  plot_general, plot_specialized,
+  ncol = 2, nrow = 1,
+  common.legend = TRUE, legend = "top"
+)
+
+# Display the combined plot
+combined_plot
 ```
+
 
 ## 
 
 #### Brechas de género en América Latina
+
+::: notes
+-   El grado de las brechas varía por tipo de autoeficacia dentro de los países latinos.
+-   Caso anecdótico de Costa Rica y Dominicana.
+:::
 
 ```{r}
 datos_combined <- latam_cleaveland |>
@@ -443,12 +507,13 @@ latam_cleaveland |>
     "mean_geneff" = "#fe3057", 
     "mean_speceff" = "#5f5758")) +
    facet_wrap(
-    ~type, nrow = 2,
+    ~type, nrow = 1,
     labeller = labeller(type = facet_labels) # Custom facet labels
   ) +
   labs(
     color = "Género"
   ) +
+  scale_x_continuous(limits = c(2.2, 3.8)) +
   theme_minimal() +
   theme(axis.title.y = element_blank(),
         axis.title.x = element_blank(),
@@ -474,6 +539,11 @@ geom_text(
 ## 
 
 #### Correlación: Índice Internacional de Desigualdades de Género
+
+::: notes
+-   A medida que aumentan las desigualdades de género, las mujeres tienden a perder ventajas en relación a los hombres.
+-   El tamaño de efecto es de mayor magnitud en la autoeficacia especializada.
+:::
 
 ```{r proc corr}
 library(readxl)
@@ -526,7 +596,7 @@ brecha_general <- pisa22ict %>%
     values_from = mean_geneff
   ) %>%
   # Calcular brecha (usa los nombres exactos de las columnas creadas por pivot_wider)
-  mutate(brecha_general = Male - Female) %>%
+  mutate(brecha_general = Female - Male) %>%
   select(CNT, brecha_general)
 
 # 2. Calcular brechas de autoeficacia específica
@@ -544,7 +614,7 @@ brecha_especifica <- pisa22ict %>%
     values_from = mean_spec
   ) %>%
   # Calcular brecha (usa los nombres exactos de las columnas creadas por pivot_wider)
-  mutate(brecha_especifica = Male - Female) %>%
+  mutate(brecha_especifica = Female - Male) %>%
   select(CNT, brecha_especifica)
 
 # 3. Unir las brechas y los índices
@@ -588,7 +658,7 @@ ggplot(datos_analisis, aes(x = GDI, y = score)) +
   ) +
   geom_smooth(method = "lm", se = TRUE, color = "#fe3057") +
   labs(
-    y = "Ventaja de mujeres en autoeficacia Digital (Mujer - Hombre)",
+    y = "Aumento relativo de Autoeficacia Digital en mujeres",
     x = "Índice Desigualdades de Género"
   ) +
   geom_text(aes(label = CNT), vjust = -0.5, size =2) +
@@ -605,6 +675,11 @@ ggplot(datos_analisis, aes(x = GDI, y = score)) +
 
 #### Correlación: Índice de Desarrollo Tecnológico
 
+::: notes
+-   A medida que los países están más digitalizados, las mujeres pierden ventajas en comparación a los hombres en autoeficacia.
+-   Este efecto es más intenso en la especializada.
+:::
+
 ```{r}
 
 ggplot(datos_analisis, aes(x = IDI, y = score)) +
@@ -616,7 +691,7 @@ ggplot(datos_analisis, aes(x = IDI, y = score)) +
   ) +
   geom_smooth(method = "lm", se = TRUE, color = "#fe3057") +
   labs(
-    y = "Ventaja de mujeres en autoeficacia Digital (Mujer - Hombre)",
+    y = "Aumento relativo de Autoeficacia Digital en mujeres",
     x = "Índice Desarrollo TIC (2023)"
   ) +
   geom_text(aes(label = CNT), vjust = -0.5, size =2) +

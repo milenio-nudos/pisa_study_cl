@@ -151,7 +151,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #ccc; /* Color del borde */
+    border: 3px solid #5f5758;
   }
 </style>
 ```
@@ -208,21 +208,21 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 -   Cuestionario de familiaridad con TIC.
 -   Ciclo 2022: `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` países.
 
-## Mediciones de autoeficacia {.smaller}
+## Mediciones de autoeficacia
 
 ¿En qué medida eres capaz de realizar las siguientes tareas cuando utilizas <dispositivos digitales>?
 
 ::::: columns
 ::: {.column width="50%"}
+**Autoeficacia general**
+
 -   Buscar y encontrar información relevante en Internet.
 
 -   Redactar o editar un texto para una tarea escolar.
-
--   Crear una presentación multimedia (con sonido, imágenes y vídeo).
 :::
 
 ::: {.column width="50%"}
--   Seleccionar el programa o app más eficiente que me permita realizar una tarea concreta.
+**Autoeficacia especializada**
 
 -   Crear un programa informático (por ejemplo en Scratch, Python, Java).
 

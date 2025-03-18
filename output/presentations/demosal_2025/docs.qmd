@@ -87,7 +87,7 @@ efficacy_variables <- pisa22ict |>
          IC183Q13JA, IC183Q14JA, IC183Q15JA, IC183Q16JA)
 
 latam_cleaveland <- pisa22ict %>% 
-  filter(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY", "USA"))
+  filter(CNT %in% c("BRA", "ARG", "CRI", "CHL", "DOM", "PAN", "URY"))
 
 
 

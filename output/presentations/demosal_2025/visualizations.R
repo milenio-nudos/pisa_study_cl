@@ -608,7 +608,7 @@ ggplot(datos_analisis, aes(x = GII, y = brecha_general)) +
   geom_smooth(method = "lm", se = TRUE, color = "grey40") +
   geom_text(aes(label = CNT), vjust = -0.5, size = 3) +
   labs(
-    title = "Relación entre brecha de autoeficacia general y GDI",
+    title = "Relación entre brecha de autoeficacia general y GII",
     x = "Gender Inequality Index (GII)",
     y = "Brecha de autoeficacia general (M-H)"
   ) +
@@ -651,3 +651,9 @@ corrplot(Mat_R$r,
          insig = "p-value",
          sig.level = -1,
          col = heat.colors(11))
+
+# Beeswamp: Agrandar las etiquetas para que se vea mejor y agregar linea del promedio. Cambiar título: autoeficacias por país
+# Primer lollypop: Eliminar títulos y demases para agrandar para que ocupe toda la diapositiva. Ordenar según la autoeficacia digital.
+# Segundo lollypop: cambiar colores de geomtext
+# Magnitud brecha de género de todos los países. 
+# Agregar los gráficos solo viendo una relación: desigualdad de género + específica y desigualdades de género + general

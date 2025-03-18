@@ -139,6 +139,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ## Equipo
 
+```{=html}
 <style>
   .image-container {
     display: flex;
@@ -153,17 +154,15 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
     border: 3px solid #ccc; /* Color del borde */
   }
 </style>
+```
 
-<div class="image-container">
-  <img src="images/d_miranda.jpg" class="circular-image" />
-  <img src="images/n_tobar.jpg" class="circular-image" />
-  <img src="images/jc_castillo.jpg" class="circular-image" />
-</div>
+::: image-container
+<img src="images/d_miranda.jpg" class="circular-image"/> <img src="images/n_tobar.jpg" class="circular-image"/> <img src="images/jc_castillo.jpg" class="circular-image"/>
+:::
 
-<div class="image-container">
-  <img src="images/i_aguayo.jpg" class="circular-image" />
-  <img src="images/t_urzua.jpg" class="circular-image" />
-</div>
+::: image-container
+<img src="images/i_aguayo.jpg" class="circular-image"/> <img src="images/t_urzua.jpg" class="circular-image"/>
+:::
 
 ## Punto de inicio
 
@@ -482,10 +481,15 @@ library(readxl)
 HDI <- readxl::read_excel("./index/HDI.xlsx")
 GDI <- readxl::read_excel("./index/GDI.xlsx")
 GII <- readxl::read_excel("./index/GII.xlsx")
-
+IDI <- readxl::read_excel("./index/IDI.xlsx")
 
 country_codes <- unique(pisa22ict$CNT)
 
+idi_filtered <- IDI %>% 
+  filter(Iso3 %in% country_codes) %>% 
+  select(IDI = `ICT Development Index (IDI)`, CNT = Iso3) %>% 
+  slice(-1)
+    
 hdi_filtered <- HDI %>%
   filter(countryIsoCode %in% country_codes) %>%
   select(HDI = value, CNT = countryIsoCode)
@@ -501,7 +505,8 @@ gii_filtered <- GII %>%
 scatter_data <- pisa22ict %>%
   left_join(hdi_filtered, by = "CNT") %>%
   left_join(gdi_filtered, by = "CNT") %>% 
-  left_join(gii_filtered, by = "CNT")
+  left_join(gii_filtered, by = "CNT") %>% 
+  left_join(idi_filtered, by = "CNT")
 
 
 # 1. Calcular brechas de autoeficacia general
@@ -547,7 +552,8 @@ datos_analisis <- brecha_general %>%
   left_join(brecha_especifica, by = "CNT") %>%
   left_join(gdi_filtered, by = "CNT") %>%
   left_join(hdi_filtered, by = "CNT") %>% 
-  left_join(gii_filtered, by = "CNT")
+  left_join(gii_filtered, by = "CNT") %>% 
+  left_join(idi_filtered, by = "CNT")
 
 
 ```
@@ -559,7 +565,8 @@ facet_labels <- c(
   "brecha_general" = "1. Autoeficacia General",
   "HDI" = "I. Desarrollo Humano",
   "GDI" = "I. Desarrollo de Género",
-  "GII" = "I. Desigualdades de Género"
+  "GII" = "I. Desigualdades de Género",
+  "IDI" = "I. Desarrollo TIC (2023)"
 )
 
 # Prepare the data
@@ -599,7 +606,27 @@ ggplot(datos_analisis, aes(x = GDI, y = score)) +
 #### Correlación: Índice de Desarrollo Tecnológico
 
 ```{r}
-# Aquí Isma
+
+ggplot(datos_analisis, aes(x = IDI, y = score)) +
+  geom_point(color = "grey40", size = 1) +
+  facet_wrap(
+    ~ type, # Separate facets by type and index
+    nrow = 1,
+    labeller = labeller(type = facet_labels, index = facet_labels) # Custom facet labels
+  ) +
+  geom_smooth(method = "lm", se = TRUE, color = "#fe3057") +
+  labs(
+    y = "Ventaja de mujeres en autoeficacia Digital (Mujer - Hombre)",
+    x = "Índice Desarrollo TIC (2023)"
+  ) +
+  geom_text(aes(label = CNT), vjust = -0.5, size =2) +
+  theme_minimal() +
+  theme(
+        legend.position = "top",
+        axis.text.x = element_text(size = 10),
+        axis.text.y = element_text(size = 10),
+        legend.text = element_text(size = 10),
+        strip.text = element_text(size=12))
 ```
 
 ## Discusión

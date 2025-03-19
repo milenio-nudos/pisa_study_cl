@@ -140,57 +140,53 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ## Equipo
 
-```{=html}
 <style>
   .image-container {
     display: flex;
     justify-content: center;
+    align-items: center; 
     margin-bottom: 50px;
+    width: 100%;
+    gap: 60px; 
   }
   .circular-image {
-    width: 200px;
-    height: 200px;
+    width: 170px; 
+    height: 170px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #5f5758;
+    flex: 0 0 auto; 
   }
 </style>
-```
+
 
 ::: image-container
-<img src="images/d_miranda.jpg" class="circular-image"/> <img src="images/n_tobar.jpg" class="circular-image"/> <img src="images/jc_castillo.jpg" class="circular-image"/>
-:::
-
-::: image-container
-<img src="images/i_aguayo.jpg" class="circular-image"/> <img src="images/t_urzua.jpg" class="circular-image"/>
+<img src="images/n_tobar.jpg" class="circular-image"/>
+<img src="images/t_urzua.jpg" class="circular-image"/>
+<img src="images/d_miranda.jpg" class="circular-image"/>
+<img src="images/i_aguayo.jpg" class="circular-image"/>
+<img src="images/jc_castillo.jpg" class="circular-image"/>
 :::
 
 ## Punto de inicio
 
-::: {.incremental .highlight-last style="font-size: 110%;"}
--   La digitalidad se puede comprender como un fenómeno multidimensional en tanto interactúa constantemente con las esferas económica, social, política y cultural [@ramirez-castaneda_brecha_2018; @camacho_brecha_2005].
-
--   Existen brechas digitales en relación al acceso de dispositivos digitales, pero últimamente ha cobrado relevancia la brecha digital en torno a **los conocimientos y habilidades** que son necesarios para desenvolverse adecuadamente en entornos digitales [@sunkel_integracion_2014].
-
--   En contextos digitales, las brechas de competencia se cruzan con viejas desigualdades, y aparecen otras nuevas. La **autoeficacia** es un factor determinante en este ensamblaje [@dijk_digital_2020].
-:::
+![](images/digital_context.jpg)
 
 ## Autoeficacia Digital y Género
 
-::: {.incremental .highlight-last style="font-size: 110%;"}
--   Autoeficacia Digital: "*Juicio introspectivo respecto a el grado de maestría o habilidad percibido para ejecutar acciones que requieran lidiar con situaciones prospectivas en los entornos digitales (hacer arreglos en las acciones para ajustarlas a la búsqueda de un objetivo)*" [@bandura_psychology_2006; @ulfert-blank_assessing_2022a].
+![](images/gen_context.jpg)
 
--   Las diferencias de género en el uso de las TIC's se han **atenuado** durante el tiempo [@hargittai_differences_2006].
+## Diferencias entre países
 
--   Las estudiantes mujeres tienden a presentar menores niveles de confianza pero mayores competencias que los hombres [@punter_gender_2017].
-:::
+![](images/world_context.jpg)
 
-##  {data-background-color="#5f5758"}
+##  {data-background-color="#5f5758"} 
 
-::: {style="font-size: 180%; display: flex; justify-content: center; align-items: center"}
+::: {style="font-size: 180%; display: flex; justify-content: center; align-items: flex-start; flex-direction: column; text-align: center"}
 *¿De qué manera se comportan las brechas de género en autoeficacia digital?*
 
-*¿Qué diferencias existen entre los países acerca de las brechas de género en autoeficacia digital?*
+
+<span style="margin-top: 150px; display: block;">*¿Qué diferencias existen entre los países acerca de las brechas de género en autoeficacia digital?*</span>
 :::
 
 ## Hipótesis
@@ -361,7 +357,7 @@ ggplot(data, aes(y = reorder(CNT, posicion), x = score)) +
 #### Brechas de Género entre países
 
 ::: notes
--   En general tienden a ganar hombres, en especializada mujeres.
+-   En general tienden a ganar mujeres, mientras que en especializada hombres.
 -   Hay unos cuantos casos excepcionales para ambas autoeficacias, pero cuando gana el sexo opuesto las brechas son minúsculas.
 -   Las brechas de género son mayores en la especializada.
 -   Los países latinoamericanos suelen estar bajo la media.
@@ -736,5 +732,3 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
 -   **Sitio web NUDOS:** [www.nudos.cl](https://www.nudos.cl/)
 -   **Repositorio GitHub del proyecto:** <https://github.com/milenio-nudos/pisa_study_cl>
-
-# Referencias bibliográficas

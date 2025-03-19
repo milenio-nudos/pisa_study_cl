@@ -201,9 +201,9 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 
 ![](images/pisa-ocde.jpg){width="5%"}
 
--   PISA: Programa para la Evaluación Internacional de Estudiantes (OCDE).
 -   Cuestionario de familiaridad con TIC.
 -   Ciclo 2022: `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` países.
+-   Nivel país: Índice de desigualdad de género e Índice de desarrollo en TIC
 
 ## Mediciones de autoeficacia
 
@@ -723,9 +723,10 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 ::: {style="font-size: 180%;"}
 -   Análisis de invarianza
 
+-   Modelamiento multinivel
+
 -   Explorar determinantes en las diferencias entre países (PIB, OCDE, Indices digitales, etc...)
 
--   Cruzar datos con otras evaluaciones de gran escala (ICILS, SIMCE, TIMSS)
 :::
 
 # Gracias!

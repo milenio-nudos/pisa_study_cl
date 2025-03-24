@@ -167,7 +167,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ![](images/hipotesis.jpg)
 
-# Datos {data-background-color="#5f5758"}
+# Método {data-background-color="#5f5758"}
 
 ## Datos
 
@@ -185,8 +185,6 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 :::
 
 ::::
-
-# Variables {data-background-color="#5f5758"}
 
 ## Variables independientes
 
@@ -224,6 +222,10 @@ Respuestas: No puedo hacerlo (1), Me cuesta hacerlo solo (2), Puedo hacerlo con 
 
 # Resultados {data-background-color="#5f5758"}
 
+1.  Distribución de promedios por país.
+2.  Brechas de género por país.
+3.  Correlaciones con Índices país.
+
 ## 
 
 #### Autoeficacia Digital entre países
@@ -245,12 +247,19 @@ beeswarm_plot <- pisa22ict|>
                names_to = "type",
                values_to = "score")
 
-beeswarm_labels <- beeswarm_plot%>%
+beeswarm_labels <- 
+  rbind(
+  beeswarm_plot%>%
   group_by(type) %>%
   arrange(score) %>%
   slice(c(1:3, (n() - 2):n())) %>% # First five and last five countries
   ungroup() %>%
-  mutate(CNT = to_label(CNT))
+  mutate(CNT = to_label(CNT)),
+  
+  beeswarm_plot%>%
+    filter(CNT %in% c("CHL","BRA","ARG","MEX"))%>%
+    mutate(CNT = to_label(CNT))
+  )
 
   
 ggplot(beeswarm_plot, aes(y = score, x = type, color = type)) +
@@ -272,7 +281,7 @@ ggplot(beeswarm_plot, aes(y = score, x = type, color = type)) +
     plot.caption = element_text(size = 15)
   ) +
   scale_x_discrete(labels = c("1. Autoeficacia General", "2. Autoeficacia Especializada")) +
-  labs(caption = "r = 0.52")
+  labs(caption = "r = 0.21")
 ```
 
 ## 

@@ -27,7 +27,7 @@ editor: visual
 ---
 
 ```{r preparacion}
-pacman::p_load(dplyr, haven, psych, purrr, tidyr, sjPlot, ggplot2,
+pacman::p_load(dplyr, haven, psych, purrr, tidyr, tidytext, sjPlot, ggplot2,
                parameters, table1, beeswarm, lme4, rio, skimr, effects,
                labelled, knitr, kableExtra, stringr, sjmisc, purr, ggbeeswarm,
                sjlabelled, ggrepel,forcats,ggpubr,upstartr)
@@ -140,33 +140,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ## Equipo
 
-<style>
-  .image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    margin-bottom: 50px;
-    width: 100%;
-    gap: 60px; 
-  }
-  .circular-image {
-    width: 170px; 
-    height: 170px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #5f5758;
-    flex: 0 0 auto; 
-  }
-</style>
-
-
-::: image-container
-<img src="images/n_tobar.jpg" class="circular-image"/>
-<img src="images/t_urzua.jpg" class="circular-image"/>
-<img src="images/d_miranda.jpg" class="circular-image"/>
-<img src="images/i_aguayo.jpg" class="circular-image"/>
-<img src="images/jc_castillo.jpg" class="circular-image"/>
-:::
+![](images/team.jpg) 
 
 ## Punto de inicio
 
@@ -191,21 +165,40 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ## Hipótesis
 
-H<sub>1</sub>. Existen dos dimensiones de autoeficacia digital, que se corresponden a un nivel básico y uno avanzado.
+![](images/hipotesis.jpg)
 
-H<sub>2</sub>. Las mujeres tienden a presentar mayores niveles de autoeficacia digital general, en cambio los hombres presentan mayores niveles de autoeficacia específica.
-
-H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
+# Datos {data-background-color="#5f5758"}
 
 ## Datos
 
-![](images/pisa-ocde.jpg){width="5%"}
+::::: columns
+::: {.column width="50%" style="font-size: 40px;"}
+-   Programme for International Student Assessment
 
 -   Cuestionario de familiaridad con TIC.
--   Ciclo 2022: `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` países.
--   Nivel país: Índice de desigualdad de género e Índice de desarrollo en TIC
 
-## Mediciones de autoeficacia
+-   Ciclo 2022: `r nrow(pisa22ict)` estudiantes, `r length(unique(pisa22ict$CNTSCHID))` escuelas y `r length(unique(pisa22ict$CNT))` países
+:::
+
+::: {.column width="50%"}
+![](images/pisa-ocde.jpg){width=100%}
+:::
+
+::::
+
+# Variables {data-background-color="#5f5758"}
+
+## Variables independientes
+
+::: {.incremental .highlight-last style="font-size: 180%;"}
+- Género 
+
+- Índice de desigualdad de género
+
+- Índice de desarrollo en TIC
+:::
+
+## Variable dependiente
 
 ¿En qué medida eres capaz de realizar las siguientes tareas cuando utilizas <dispositivos digitales>?
 
@@ -218,7 +211,7 @@ H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre
 -   Redactar o editar un texto para una tarea escolar.
 :::
 
-::: {.column width="50%"}
+::: {.column width="50%" style="color: #ff3057;"}
 **Autoeficacia especializada**
 
 -   Crear un programa informático (por ejemplo en Scratch, Python, Java).
@@ -738,12 +731,12 @@ ggplot(datos_analisis, aes(x = IDI, y = score)) +
 
 ## Discusión
 
-::: {.incremental .highlight-last style="font-size: 130%;"}
-H<sub>1</sub>. Los modelos de medición comprueban que hay dos dimensiones en la autoeficacia digital.
+::: {.incremental .highlight-last style="font-size: 150%;"}
+-    Los modelos de medición comprueban que hay dos dimensiones en la autoeficacia digital.
 
-H<sub>2</sub>. Las mujeres presentan ventajas en la autoeficacia básica y los hombres en la autoeficacia especializada.
+-    Las mujeres presentan ventajas en la autoeficacia básica y los hombres en la autoeficacia especializada.
 
-H<sub>3</sub>. Las diferencias por género de autoeficacia digital varían entre los países del mundo.
+-    Las diferencias por género de autoeficacia digital varían entre los países del mundo.
 :::
 
 ## Conclusiones

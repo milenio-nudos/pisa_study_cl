@@ -2,8 +2,12 @@
 
 This repository contains all the analyses and processing carried out by the NUDOS social line team on the ICT questionnaire from the OECD PISA database. 
 
+
+
 > [!NOTE]  
 > The structure of the repository is as follows (based on the IPO protocol):
+
+
 
 ```
 ├── input: Information required to prepare processing, analysis, presentations, and articles:
@@ -19,16 +23,22 @@ This repository contains all the analyses and processing carried out by the NUDO
 │ ├─── reports: Progress reports in QMD format, along with their rendered HTML versions.
 ```
 
+
+
 > [!IMPORTANT]  
 > Here are the links to the reports and presentations of this study.
 
-[ISA 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/isa2025/docs.html)
-[Demosal 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/demosal_2025/docs.html)
-[First visualization and analysis report](https://milenio-nudos.github.io/pisa_study_cl/output/reports/analisis.html)
-[Exploration analysis](https://milenio-nudos.github.io/pisa_study_cl/output/reports/NUDOS_PISA_explora.html)
+- [ISA 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/isa2025/docs.html)
+- [Demosal 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/demosal_2025/docs.html)
+- [First visualization and analysis report](https://milenio-nudos.github.io/pisa_study_cl/output/reports/Analisis.html)
+- [Exploration analysis](https://milenio-nudos.github.io/pisa_study_cl/output/reports/NUDOS_PISA_explora.html)
+
+
 
 > [!TIP]
 > Paper information.
+
+
 
 **Title**: Gender differences in digital self-efficacy at school across 52 countries. 
 

@@ -1,0 +1,409 @@
+---
+title: "appendix"
+format: html
+---
+
+# Anexo
+
+## Descriptivos {.smaller .scrollable}
+
+```{r}
+#| eval: false
+
+sjmisc::descr(efficacy_variables, 
+      show = c("label", "mean", "sd", "NA.prc", "n"))%>%
+      kable(.,"html")%>%
+      kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = FALSE)
+```
+
+## Análisis factorial general {.scrollable}
+
+```{r}
+#| eval: false
+
+fac <- fa(r = efficacy_variables|> select(-CNT),
+          nfactors = 2, fm= "pa", rotate="promax")
+
+sjPlot::tab_fa(fac,
+               var.labels = variables_labels,
+               encoding = "UTF-8")
+```
+
+```{r}
+#| eval: false
+
+# Group by CNT (código país)
+resultados_factoriales <- efficacy_variables %>%
+  group_by(CNT) %>%
+  group_split() %>%
+  map(~ fa(select(.x, -CNT), nfactors = 2, fm = "pa", rotate = "promax"))
+
+# Tabla con todos los resultados por país
+
+tabla_resultados <- map2_dfr(
+  resultados_factoriales,
+  unique(efficacy_variables$CNT),
+  ~ tibble(
+    Variable = rownames(.x$loadings),
+    CNT = .y,
+    CargaFactor1 = .x$loadings[, 1],
+    CargaFactor2 = .x$loadings[, 2]
+    )
+  ) %>%
+  arrange(Variable)
+
+tabla_resultados <- tabla_resultados %>% 
+  mutate(Factor1 = if_else(CargaFactor1 >0.5, TRUE, FALSE)
+) %>% 
+  mutate(Factor2 = if_else(CargaFactor2 >0.5, TRUE, FALSE))%>%
+  mutate(modelo = case_when(
+    Variable %in% c("IC183Q01JA", "IC183Q02JA", "IC183Q03JA", "IC183Q04JA","IC183Q05JA", "IC183Q07JA", "IC183Q08JA", "IC183Q09JA",
+"IC183Q12JA", "IC183Q13JA") &
+    Factor1 == TRUE ~ TRUE,
+    Variable %in% c("IC183Q10JA", "IC183Q14JA", "IC183Q15JA", "IC183Q16JA") &
+    Factor2 == TRUE ~ TRUE,
+    Variable %in% c("IC183Q01JA", "IC183Q02JA", "IC183Q03JA", "IC183Q04JA","IC183Q05JA", "IC183Q07JA", "IC183Q08JA", "IC183Q09JA",
+"IC183Q12JA", "IC183Q13JA") &
+    Factor1 == FALSE ~ FALSE,  
+    Variable %in% c("IC183Q10JA", "IC183Q14JA", "IC183Q15JA", "IC183Q16JA") &
+    Factor2 == FALSE ~ FALSE
+))
+
+tabla_resultados %>%
+  kable()
+```
+
+## Distribución de cargas factoriales por país
+
+Autoeficacia General
+
+```{r}
+#| eval: false
+
+ggplot2::ggplot(tabla_resultados, aes(CargaFactor1, Variable)) +
+        geom_point() +
+        geom_point(
+          color="#fe3057"
+        )
+```
+
+## Distribución de cargas factoriales por país
+
+Autoeficacia Especializada
+
+```{r}
+#| eval: false
+
+ggplot2::ggplot(tabla_resultados, aes(CargaFactor2, Variable)) +
+        geom_point() +
+        geom_point(
+          color="#fe3057"
+        )
+```
+
+```{r}
+#| eval: false
+
+tabla_display <- tabla_resultados %>%
+  group_by(Variable) %>%
+  summarize(
+    TRUE_model = sum(modelo == TRUE, na.rm = TRUE),
+    FALSE_model = sum(modelo == FALSE, na.rm = TRUE),
+    prop_TRUE = TRUE_model / 52,
+    prop_FALSE = FALSE_model / 52,
+  )%>%
+  ungroup()%>%
+  mutate(Variable = recode(Variable,
+  IC183Q01JA = "buscar_info", 
+  IC183Q02JA = "evaluar_info", 
+  IC183Q03JA = "compartir_info", 
+  IC183Q04JA = "colaboracion_pares",
+  IC183Q05JA = "explicar_info_pares",
+  IC183Q07JA = "editar_texto", 
+  IC183Q08JA = "manejar_datos", 
+  IC183Q09JA = "crear_presentacion", 
+  IC183Q10JA = "manejar_pag_web",
+  IC183Q12JA = "configuracion_privacidad",
+  IC183Q13JA = "selecc_mejor_app", 
+  IC183Q14JA = "crear_programa", 
+  IC183Q15JA = "hallar_error_programa", 
+  IC183Q16JA = "representar_solucion_logica"))%>%
+  mutate(type = c("Básica","Básica","Básica","Básica","Básica",
+                  "Básica","Básica","Básica","Especializada",
+                  "Básica","Básica","Especializada",
+                  "Especializada","Especializada"))
+
+tabla_display |>
+  select(Variable,type,prop_TRUE,TRUE_model,FALSE_model)|>
+  kable()
+```
+
+## Distribución de cargas factoriales
+
+Proporción de países ajustados al modelo por variable
+
+```{r}
+#| eval: false
+
+tabla_resultados|>
+  count(Variable,modelo)|>
+  mutate(Variable = recode(Variable,
+  IC183Q01JA = "buscar_info", 
+  IC183Q02JA = "evaluar_info", 
+  IC183Q03JA = "compartir_info", 
+  IC183Q04JA = "colaboracion_pares",
+  IC183Q05JA = "explicar_info_pares",
+  IC183Q07JA = "editar_texto", 
+  IC183Q08JA = "manejar_datos", 
+  IC183Q09JA = "crear_presentacion", 
+  IC183Q10JA = "manejar_pag_web",
+  IC183Q12JA = "configuracion_privacidad",
+  IC183Q13JA = "selecc_mejor_app", 
+  IC183Q14JA = "crear_programa", 
+  IC183Q15JA = "hallar_error_programa", 
+  IC183Q16JA = "representar_solucion_logica"))|>
+  
+ggplot(aes(y = Variable, x = n, fill = modelo)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 80))+
+  scale_fill_manual(values = c("#5f5758", "#fe3057"))+
+  theme_minimal()
+```
+
+## Distribución de cargas factoriales
+
+Proporción de variables ajustadas al modelo por país
+
+```{r}
+#| eval: false
+
+tabla_resultados|>
+  mutate(CNT = to_label(CNT))|>
+  count(CNT,modelo)|>
+  
+ggplot(aes(y = CNT, x = n, fill = modelo)) +
+  geom_bar(position = "fill", stat = "identity") +
+  scale_y_discrete(labels = function(x) str_wrap(x, width = 80))+
+  scale_fill_manual(values = c("#5f5758", "#fe3057"))+
+  theme_minimal()
+
+```
+
+# Descripción variables autoeficacia
+
+## Concentración de respuestas
+
+```{r}
+#| eval: false
+
+# Crear un gráfico de densidad por grupos
+ggplot(pisa22ict, aes(x = effgen)) +
+  geom_density(alpha = 0.6) +
+  labs(title = "Distribución del índice de autoeficacia general",
+       x = "Autoeficacia General",
+       y = "Densidad") +
+  scale_fill_manual(values = c("#5f5758", "#fe3057")) +
+  theme_minimal()
+```
+
+## Concentración de respuestas
+
+```{r}
+#| eval: false
+
+# Crear un gráfico de densidad por grupos
+ggplot(pisa22ict, aes(x = effspec)) +
+  geom_density(alpha = 0.6) +
+  labs(title = "Distribución del índice de autoeficacia especializada",
+       x = "Autoeficacia Especializada",
+       y = "Densidad") +
+  scale_fill_manual(values = c("#5f5758", "#fe3057")) +
+  theme_minimal()
+```
+
+## Descriptivos generales
+
+```{r}
+#| eval: false
+
+table1::table1(~ effgen + effspec, data=pisa22ict, topclass="Rtable1-zebra", caption = "Tabla 1: Estadísticos Descriptivos índice",
+               footnote = "Fuente: Elaboración propia con datos de PISA.")
+
+```
+
+## Descriptivos por género
+
+```{r}
+#| eval: false
+
+pvalue <- function(x, ...) {
+    # Construct vectors of data y, and groups (strata) g
+    y <- unlist(x)
+    g <- factor(rep(1:length(x), times=sapply(x, length)))
+    if (is.numeric(y)) {
+        # For numeric variables, perform a standard 2-sample t-test
+        p <- t.test(y ~ g)$p.value
+    } else {
+        # For categorical variables, perform a chi-squared test of independence
+        p <- chisq.test(table(y, g))$p.value
+    }
+    # Format the p-value, using an HTML entity for the less-than sign.
+    # The initial empty string places the output on the line below the variable label.
+    c("", sub("<", "&lt;", format.pval(p, digits=3, eps=0.001)))
+}
+
+table1::table1(~ effgen + effspec | sex, data=pisa22ict|>drop_na(sex)|>mutate(sex = to_label(sex)), topclass="Rtable1-zebra", overall = FALSE, extra.col=list(`P-value`=pvalue), caption = "Tabla 1: Estadísticos Descriptivos índice: Comparación por sexo",
+               footnote = "Fuente: Elaboración propia con datos de PISA.")
+```
+
+## Magnitud de la brecha de género
+
+```{r}
+#| eval: false
+
+# Calculate the wide-format data and mean_gap
+wide_data <- pisa22ict %>%
+  group_by(CNT, sex) %>%
+  summarise(mean_geneff = mean(effgen, na.rm = TRUE), .groups = 'drop') %>%
+  ungroup() %>%
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) %>%
+  drop_na() %>%
+  pivot_wider(
+    names_from = sex, # Column to use for new column names
+    values_from = mean_geneff, # Column to use for values
+    names_glue = "score_of_{sex}" # Customize new column names
+  ) %>%
+  mutate(gap = score_of_Male - score_of_Female) %>%
+  mutate(mean_gap = mean(gap)) # Calculate mean_gap
+
+# Extract the mean_gap value
+mean_gap_value <- wide_data %>% pull(mean_gap) %>% unique()
+
+# Create the plot
+ggplot(wide_data, aes(y = reorder(CNT,-gap), x = gap)) +
+  geom_point(aes(group = CNT), size = 3, color = "#fe3057") + # Add points
+  geom_vline(xintercept = 0, color = "#5f5758", linetype = "dashed", size = 1) + # Add mean_gap line
+  labs(
+    title = "Magnitud de la brecha de género en 
+    autoeficacia general por país
+    ",
+  ) +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank())
+```
+
+## Magnitud de la brecha de género
+
+```{r}
+#| eval: false
+
+# Calculate the wide-format data and mean_gap
+wide_data <- pisa22ict %>%
+  group_by(CNT, sex) %>%
+  summarise(mean_spec = mean(effspec, na.rm = TRUE), .groups = 'drop') %>%
+  ungroup() %>%
+  mutate(CNT = to_label(CNT),
+         sex = to_label(sex)) %>%
+  drop_na() %>%
+  pivot_wider(
+    names_from = sex, # Column to use for new column names
+    values_from = mean_spec, # Column to use for values
+    names_glue = "score_of_{sex}" # Customize new column names
+  ) %>%
+  mutate(gap = score_of_Male - score_of_Female) %>%
+  mutate(mean_gap = mean(gap)) # Calculate mean_gap
+
+# Extract the mean_gap value
+mean_gap_value <- wide_data %>% pull(mean_gap) %>% unique()
+
+# Create the plot
+ggplot(wide_data, aes(y = reorder(CNT,-gap), x = gap)) +
+  geom_point(aes(group = CNT), size = 3, color = "#fe3057") + # Add points
+  geom_vline(xintercept = 0, color = "#5f5758", linetype = "dashed", size = 1) + # Add mean_gap line
+  labs(
+    title = "Magnitud de la brecha de género en autoeficacia 
+    específica por país",
+  ) +
+  theme_minimal() +
+  theme(axis.title.y = element_blank(),
+        axis.title.x = element_blank())
+```
+
+# Modelos de regresión Multinivel
+
+## Tabla de resultados {.smaller}
+
+```{r}
+#| eval: false
+
+# Sex as factor
+pisa22ict$sexf=as.factor(pisa22ict$sex)
+pisa22ict$CNTRYID=to_label(pisa22ict$CNTRYID)
+
+
+#Autoeficacia General
+m2 <- lme4::lmer(effgen~ factor(sex) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+m2a <- lme4::lmer(effgen~ factor(sex) + (sex | CNTRYID), data = pisa22ict, REML=FALSE)
+
+#Autoeficacia Especializada
+m1 <- lme4::lmer(effspec~ factor(sex) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+m1a <- lme4::lmer(effspec~ factor(sex) + (sex | CNTRYID), data = pisa22ict, REML=FALSE)
+
+
+
+sjPlot::tab_model(m2,m2a,m1,m1a,
+                  p.style = "stars",
+                  dv.labels = c("effgen", "effgen pendiente aleatoria", "effspec", "effspec pendiente aleatoria"),
+                  p.threshold = c(0.05, 0.01, 0.001),
+                  show.se = FALSE,
+                  digits =2)
+
+
+#anova(m1, m1a)
+# Efecto global es -0,11 menos de autoeficacia para hombres.
+# Efecto es aleartorio entre países
+#anova(m2, m2a)
+# Efecto global es 0,14 de autoeficacia a favor de hombres.
+# Efecto es aleartorio entre países
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
+```
+
+## Efectos entre-países
+
+```{r}
+#| eval: false
+
+plot_model(m2a, type="re",
+    title = "Modelo aleatorio. Autoeficacia Digital General")
+# Aunque es negativo en varios países (unos 26), efecto es neutro o positivo en otros.
+# Varibilidad es pequeña
+```
+
+## Efectos entre-países
+
+```{r}
+#| eval: false
+
+plot_model(m1a, type="re",
+    title = "Modelo aleatorio. Autoeficacia Digital Especializada")
+# Aunque es positivo en varios países (unos 27), efecto es neutro o negativo en otros.
+
+```
+
+## Modelos OCDE {.smaller}
+
+```{r}
+#| eval: false
+
+m3a <- lme4::lmer(effgen~ factor(sex) + factor(OCDE) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+m3b <- lme4::lmer(effspec~ factor(sex) + factor(OCDE) + (1 | CNTRYID), data = pisa22ict, REML=FALSE)
+
+sjPlot::tab_model(m3a,m3b,
+                  p.style = "stars",
+                  dv.labels = c("effgen", "effspec"),
+                  p.threshold = c(0.05, 0.01, 0.001),
+                  show.se = FALSE,
+                  digits =2)
+```

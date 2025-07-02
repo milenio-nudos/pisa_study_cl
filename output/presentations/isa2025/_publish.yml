@@ -1,0 +1,4 @@
+- source: docs.qmd
+  quarto-pub:
+    - id: 737cb548-f09c-47ea-ba76-314a5d6f23f1
+      url: 'https://nudos.quarto.pub/demosal-2025'

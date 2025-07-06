@@ -135,9 +135,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 ::::: columns
 ::: {.column width="50%" style="font-size: 40px;"}
-
-"... *expectations about one's capabilities to learn and accomplish tasks in digital technologies and digital environments*, is one of the principal components to promote the formation of digital competences" (Ulffert-Blank & Schmidt, 2022). 
-
+"... *expectations about one's capabilities to learn and accomplish tasks in digital technologies and digital environments*, is one of the principal components to promote the formation of digital competences" (Ulffert-Blank & Schmidt, 2022).
 :::
 
 ::: {.column width="50%"}
@@ -148,14 +146,12 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 ## Bidimensional digital self-efficacy?
 
 ::: {.incremental .highlight-last style="font-size: 40px;"}
+-   Digital Self-efficacy have been understood as a unidimensional concept
 
-- Digital Self-efficacy have been understood as a unidimensional concept
+-   In the last years it has been proposed a distinction between two types of self-efficacy: general and specialized.
 
-- In the last years it has been proposed a distinction between two types of self-efficacy: general and specialized.
-
-- Cross-country studies operationalize digital self-efficacy in a one-dimensional and two-dimensional manner
-
-::: 
+-   Cross-country studies operationalize digital self-efficacy in a one-dimensional and two-dimensional manner
+:::
 
 ## Country differences
 
@@ -173,9 +169,9 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 # Methods {data-background-color="#5f5758"}
 
-- Measurement validation of the scale 
+-   Measurement validation of the scale
 
-- Stability of the scale across countries and gender
+-   Stability of the scale across countries and gender
 
 ## Data
 
@@ -225,6 +221,10 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 Answers: I cannot do this (1), I struggle to do this on my own (2), I can do with a bit of effort (3), I can easily do this (4).
 
+## Hypothesis
+
+![](images/model_hypothesis.jpg)
+
 # Results {data-background-color="#5f5758"}
 
 1.  Measurement model
@@ -236,7 +236,27 @@ Answers: I cannot do this (1), I struggle to do this on my own (2), I can do wit
 
 #### Global CFA model
 
-![](images/esquema_cfa.jpg)
+
+<div style="text-align: center;">
+  <img src="images/esquema_cfa.jpg" style="width: 80%" />
+</div>
+
+
+::::: columns
+
+::: {.column width="50%" style="font-size: 20px;"}
+
+CFI: 0.999 RMSEA: 0.054 &chi;&sup2;: 15107.60 
+
+:::
+
+::: {.column width="50%" style="font-size: 24px;"}
+
+Metrical and Scalar Invariance across countries and by gender
+
+:::
+
+:::::
 
 ## 
 
@@ -372,9 +392,9 @@ ggplot(plot_data, aes(y = CNT, x = score)) +  # Use CNT directly (already reorde
 ## Discusion
 
 ::: {.incremental .highlight-last style="font-size: 100%;"}
-- It is possible to identify two dimensions on PISA Digital Self-efficacy measurement?
+-   It is possible to identify two dimensions on PISA Digital Self-efficacy measurement?
 
-    -   Yes, we can identify both basic and specialized Digital Self-efficacy on PISA 2022. 
+    -   Yes, we can identify both basic and specialized Digital Self-efficacy on PISA 2022.
 
 -   Is the bidimensional model of Digital Self-efficacy equivalent by gender and across countries?
 
@@ -382,13 +402,12 @@ ggplot(plot_data, aes(y = CNT, x = score)) +  # Use CNT directly (already reorde
 
 -   Which gender differences exist on Digital Self-efficacy across countires?
 
-    -   In general girls takes advantage in General DSE and boys on Specialized DSE.
-    -   But in some not occidental OCDE countries female takes advantage in Specialized DSE.
+    -   Girls takes advantage in General DSE and boys on Specialized DSE.
 :::
 
 ## Next steps {style="font-size: 60px;"}
 
-- What factors could explain these differences between countries and genders in relation to digital self-efficacy?
+What factors could explain these differences between countries and genders in relation to digital self-efficacy?
 
 # Thank!
 
@@ -421,31 +440,31 @@ ggplot(plot_data, aes(y = CNT, x = score)) +  # Use CNT directly (already reorde
     <table style="margin: 0 auto;">
   <caption>Cross-Country</caption>
   <thead>
-    <tr>
-      <th style="text-align: left;">Model</th>
-      <th style="text-align: right;">&chi;&sup2;</th>
-      <th style="text-align: right;">df</th>
-      <th style="text-align: right;">CFI</th>
-      <th style="text-align: right;">TLI</th>
-      <th style="text-align: right;">RMSEA</th>
-      <th style="text-align: right;">SRMR</th>
-      <th style="text-align: right;">&Delta;&chi;&sup2;</th>
-      <th style="text-align: right;">&Delta;df</th>
-      <th style="text-align: right;">&Delta;CFI</th>
-      <th style="text-align: right;">&Delta;RMSEA</th>
-      <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
-    </tr>
+<tr>
+  <th style="text-align: left;">Model</th>
+  <th style="text-align: right;">&chi;&sup2;</th>
+  <th style="text-align: right;">df</th>
+  <th style="text-align: right;">CFI</th>
+  <th style="text-align: right;">TLI</th>
+  <th style="text-align: right;">RMSEA</th>
+  <th style="text-align: right;">SRMR</th>
+  <th style="text-align: right;">&Delta;&chi;&sup2;</th>
+  <th style="text-align: right;">&Delta;df</th>
+  <th style="text-align: right;">&Delta;CFI</th>
+  <th style="text-align: right;">&Delta;RMSEA</th>
+  <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
+</tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Configural</td><td style="text-align: right;">15107.60</td><td style="text-align: right;">988</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.054</td><td style="text-align: right;">0.035</td><td colspan="5"></td>
-    </tr>
-    <tr>
-      <td>Metrical</td><td style="text-align: right;">18502.76</td><td style="text-align: right;">1294</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.052</td><td style="text-align: right;">0.037</td><td style="text-align: right;">3395.16</td><td style="text-align: right;">306</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
-    </tr>
-    <tr>
-      <td>Scalar</td><td style="text-align: right;">24944.79</td><td style="text-align: right;">2008</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.048</td><td style="text-align: right;">0.035</td><td style="text-align: right;">6442.03</td><td style="text-align: right;">714</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
-    </tr>
+<tr>
+  <td>Configural</td><td style="text-align: right;">15107.60</td><td style="text-align: right;">988</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.054</td><td style="text-align: right;">0.035</td><td colspan="5"></td>
+</tr>
+<tr>
+  <td>Metrical</td><td style="text-align: right;">18502.76</td><td style="text-align: right;">1294</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.052</td><td style="text-align: right;">0.037</td><td style="text-align: right;">3395.16</td><td style="text-align: right;">306</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
+</tr>
+<tr>
+  <td>Scalar</td><td style="text-align: right;">24944.79</td><td style="text-align: right;">2008</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.048</td><td style="text-align: right;">0.035</td><td style="text-align: right;">6442.03</td><td style="text-align: right;">714</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
+</tr>
   </tbody>
 </table>
 
@@ -454,31 +473,31 @@ ggplot(plot_data, aes(y = CNT, x = score)) +  # Use CNT directly (already reorde
     <table style="margin: 0 auto;">
   <caption>By Gender</caption>
   <thead>
-    <tr>
-      <th style="text-align: left;">Model</th>
-      <th style="text-align: right;">&chi;&sup2;</th>
-      <th style="text-align: right;">df</th>
-      <th style="text-align: right;">CFI</th>
-      <th style="text-align: right;">TLI</th>
-      <th style="text-align: right;">RMSEA</th>
-      <th style="text-align: right;">SRMR</th>
-      <th style="text-align: right;">&Delta;&chi;&sup2;</th>
-      <th style="text-align: right;">&Delta;df</th>
-      <th style="text-align: right;">&Delta;CFI</th>
-      <th style="text-align: right;">&Delta;RMSEA</th>
-      <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
-    </tr>
+<tr>
+  <th style="text-align: left;">Model</th>
+  <th style="text-align: right;">&chi;&sup2;</th>
+  <th style="text-align: right;">df</th>
+  <th style="text-align: right;">CFI</th>
+  <th style="text-align: right;">TLI</th>
+  <th style="text-align: right;">RMSEA</th>
+  <th style="text-align: right;">SRMR</th>
+  <th style="text-align: right;">&Delta;&chi;&sup2;</th>
+  <th style="text-align: right;">&Delta;df</th>
+  <th style="text-align: right;">&Delta;CFI</th>
+  <th style="text-align: right;">&Delta;RMSEA</th>
+  <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
+</tr>
   </thead>
   <tbody>
-    <tr>
-      <td>Configural</td><td style="text-align: right;">10154.70</td><td style="text-align: right;">38</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.046</td><td style="text-align: right;">0.029</td><td colspan="5"></td>
-    </tr>
-    <tr>
-      <td>Metrical</td><td style="text-align: right;">10796.98</td><td style="text-align: right;">44</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.044</td><td style="text-align: right;">0.029</td><td style="text-align: right;">642.28</td><td style="text-align: right;">6</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
-    </tr>
-    <tr>
-      <td>Scalar</td><td style="text-align: right;">11634.72</td><td style="text-align: right;">58</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.040</td><td style="text-align: right;">0.029</td><td style="text-align: right;">837.74</td><td style="text-align: right;">14</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
-    </tr>
+<tr>
+  <td>Configural</td><td style="text-align: right;">10154.70</td><td style="text-align: right;">38</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.046</td><td style="text-align: right;">0.029</td><td colspan="5"></td>
+</tr>
+<tr>
+  <td>Metrical</td><td style="text-align: right;">10796.98</td><td style="text-align: right;">44</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.044</td><td style="text-align: right;">0.029</td><td style="text-align: right;">642.28</td><td style="text-align: right;">6</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
+</tr>
+<tr>
+  <td>Scalar</td><td style="text-align: right;">11634.72</td><td style="text-align: right;">58</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.040</td><td style="text-align: right;">0.029</td><td style="text-align: right;">837.74</td><td style="text-align: right;">14</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
+</tr>
   </tbody>
 </table>
 

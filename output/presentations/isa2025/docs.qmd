@@ -1,6 +1,6 @@
 ---
 pagetitle: "Digital Self-efficacy measurement and gender differences between 52 countries in PISA"
-Author: Daniel Miranda, Juan Carlos Castillo, Nicolas Tobar, Tomás Urzúa e Ismael Aguayo
+Author: Daniel Miranda, Juan Carlos Castillo, Nicolas Tobar, Ismael Aguayo y Tomás Urzúa
 #bibliography: ../../../input/bib/icils_nudos.bib
 #csl: ../../../input/bib/apa.csl
 
@@ -48,7 +48,7 @@ variables_labels <- c(
                  "hallar_error_programa",
                  "representar_solucion_logica")
 
-pisa22ict <- readRDS("../../data/proc_data/pisa22ict.rds")
+pisa22ict <- readRDS("../../../input/proc_data/pisa22ict.rds")
 
 # "No sé" como NA
 pisa22ict <- pisa22ict|>
@@ -127,38 +127,51 @@ Esta ponencia trata principalmente de las desigualdades digitales en la educaci�
 Un poco de contexto: esta investigación forma parte de un proyecto de investigación sobre Desigualdades y Oportunidades Digitales (proyecto NUDOS) en el que estamos cubriendo áreas como la conectividad, la educación y la política con un amplio equipo de investigadores, más información en nuestra web.
 :::
 
-## Research team
-
-![](images/team-ing.jpg)
-
 ## Starting point
 
 ![](images/dig-context.jpg)
 
-## Digital self-efficacy and gender 
+## Digital self-efficacy and gender
 
-![](images/dse-def.jpg)
+::::: columns
+::: {.column width="50%" style="font-size: 40px;"}
+"... *expectations about one's capabilities to learn and accomplish tasks in digital technologies and digital environments*, is one of the principal components to promote the formation of digital competences" (Ulffert-Blank & Schmidt, 2022).
+:::
 
-## ILSAs approach
+::: {.column width="50%"}
+![](images/woman-prog.jpg){width="100%"}
+:::
+:::::
 
-- Previous international large-scale assessment studies have already measured digital self-efficacy
+## Bidimensional digital self-efficacy?
 
-- International Computer and Information Literacy Study proposes a distinction between two types of self-efficacy: general and specialized.
+::: {.incremental .highlight-last style="font-size: 40px;"}
+-   Digital Self-efficacy have been understood as a unidimensional concept
+
+-   In the last years it has been proposed a distinction between two types of self-efficacy: general and specialized.
+
+-   Cross-country studies operationalize digital self-efficacy in a one-dimensional and two-dimensional manner
+:::
 
 ## Country differences
+
 ![](images/contries-dif.jpg)
 
 ##  {data-background-color="#5f5758"}
 
 ::: {style="font-size: 180%; display: flex; justify-content: center; align-items: flex-start; flex-direction: column; text-align: center"}
-*It is possible to identify two dimensions on PISA Digital Self-efficacy Measurement?*
+*It is possible to identify two dimensions on PISA Digital Self-efficacy measurement?*
 
-*Is The bidimensional model of Digital Self-efficacy equivalent by gender and across countries?*
+*Is the bidimensional model of Digital Self-efficacy equivalent by gender and across countries?*
 
-*Which gender differences exist on Digital Self-efficacy across countires?*
+*Which gender differences exist on Digital Self-efficacy across countries?*
 :::
 
 # Methods {data-background-color="#5f5758"}
+
+-   Measurement validation of the scale
+
+-   Stability of the scale across countries and gender
 
 ## Data
 
@@ -181,7 +194,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 ¿To what extent are you able to do the following tasks when using <digital sources>?
 
 ::::: columns
-::: {.column width="50%"}
+::: {.column width="50%" style="font-size: 26px;"}
 **General self-efficacy**
 
 -   Assess the quality of information you found online.
@@ -195,7 +208,7 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 -   Write or edit text for a school assignment.
 :::
 
-::: {.column width="50%" style="color: #ff3057;"}
+::: {.column width="50%" style="font-size: 26px; color: #ff3057;"}
 **Specializated self-efficacy**
 
 -   Create a computer program .
@@ -208,6 +221,10 @@ Un poco de contexto: esta investigación forma parte de un proyecto de investiga
 
 Answers: I cannot do this (1), I struggle to do this on my own (2), I can do with a bit of effort (3), I can easily do this (4).
 
+## Hypothesis
+
+![](images/model_hypothesis.jpg)
+
 # Results {data-background-color="#5f5758"}
 
 1.  Measurement model
@@ -219,99 +236,29 @@ Answers: I cannot do this (1), I struggle to do this on my own (2), I can do wit
 
 #### Global CFA model
 
-![](images/esquema_cfa.jpg)
+
+<div style="text-align: center;">
+  <img src="images/esquema_cfa.jpg" style="width: 80%" />
+</div>
+
+
+::::: columns
+
+::: {.column width="50%" style="font-size: 20px;"}
+
+CFI: 0.999 RMSEA: 0.054 &chi;&sup2;: 15107.60 
+
+:::
+
+::: {.column width="50%" style="font-size: 24px;"}
+
+Metrical and Scalar Invariance across countries and by gender
+
+:::
+
+:::::
 
 ## 
-
-#### Invariance Analysis {.smaller}
-
-```{=html}
-
-<div style="
-  display: flex;
-  justify-content: center;
-  height: 80vh;
-  padding: 1em;
-">
-
-  <div style="
-    font-size: 65%;
-    line-height: 1.2;
-    max-height: 70vh;
-    overflow-y: auto;
-    text-align: center;
-  ">
-
-    <table style="margin: 0 auto;">
-      <caption>Cross-Country</caption>
-      <thead>
-        <tr>
-          <th style="text-align: left;">Model</th>
-          <th style="text-align: right;">&chi;&sup2;</th>
-          <th style="text-align: right;">df</th>
-          <th style="text-align: right;">CFI</th>
-          <th style="text-align: right;">TLI</th>
-          <th style="text-align: right;">RMSEA</th>
-          <th style="text-align: right;">SRMR</th>
-          <th style="text-align: right;">&Delta;&chi;&sup2;</th>
-          <th style="text-align: right;">&Delta;df</th>
-          <th style="text-align: right;">&Delta;CFI</th>
-          <th style="text-align: right;">&Delta;RMSEA</th>
-          <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Configural</td><td style="text-align: right;">15107.60</td><td style="text-align: right;">988</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.054</td><td style="text-align: right;">0.035</td><td colspan="5"></td>
-        </tr>
-        <tr>
-          <td>Metrical</td><td style="text-align: right;">18502.76</td><td style="text-align: right;">1294</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.052</td><td style="text-align: right;">0.037</td><td style="text-align: right;">3395.16</td><td style="text-align: right;">306</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
-        </tr>
-        <tr>
-          <td>Scalar</td><td style="text-align: right;">24944.79</td><td style="text-align: right;">2008</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.048</td><td style="text-align: right;">0.035</td><td style="text-align: right;">6442.03</td><td style="text-align: right;">714</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <br><br>
-
-    <table style="margin: 0 auto;">
-      <caption>By Gender</caption>
-      <thead>
-        <tr>
-          <th style="text-align: left;">Model</th>
-          <th style="text-align: right;">&chi;&sup2;</th>
-          <th style="text-align: right;">df</th>
-          <th style="text-align: right;">CFI</th>
-          <th style="text-align: right;">TLI</th>
-          <th style="text-align: right;">RMSEA</th>
-          <th style="text-align: right;">SRMR</th>
-          <th style="text-align: right;">&Delta;&chi;&sup2;</th>
-          <th style="text-align: right;">&Delta;df</th>
-          <th style="text-align: right;">&Delta;CFI</th>
-          <th style="text-align: right;">&Delta;RMSEA</th>
-          <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Configural</td><td style="text-align: right;">10154.70</td><td style="text-align: right;">38</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.046</td><td style="text-align: right;">0.029</td><td colspan="5"></td>
-        </tr>
-        <tr>
-          <td>Metrical</td><td style="text-align: right;">10796.98</td><td style="text-align: right;">44</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.044</td><td style="text-align: right;">0.029</td><td style="text-align: right;">642.28</td><td style="text-align: right;">6</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
-        </tr>
-        <tr>
-          <td>Scalar</td><td style="text-align: right;">11634.72</td><td style="text-align: right;">58</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.040</td><td style="text-align: right;">0.029</td><td style="text-align: right;">837.74</td><td style="text-align: right;">14</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-</div>
-```
-
-
-##
 
 #### Digital Self-efficacy across countries
 
@@ -444,18 +391,116 @@ ggplot(plot_data, aes(y = CNT, x = score)) +  # Use CNT directly (already reorde
 
 ## Discusion
 
-::: {.incremental .highlight-last style="font-size: 120%;"}
--   Is The bidimensional model of Digital Self-efficacy equivalent by gender and across countries?
+::: {.incremental .highlight-last style="font-size: 100%;"}
+-   It is possible to identify two dimensions on PISA Digital Self-efficacy measurement?
 
-    -  Yes, but with less items PISA propose in their own battery.
+    -   Yes, we can identify both basic and specialized Digital Self-efficacy on PISA 2022.
+
+-   Is the bidimensional model of Digital Self-efficacy equivalent by gender and across countries?
+
+    -   Yes, but with less items PISA propose in their own battery.
 
 -   Which gender differences exist on Digital Self-efficacy across countires?
 
-    -  In general Girls takes advantage in General DSE and Boys on Specialized DSE.
-    -  But in some not Occidental OCDE countries Female takes advantage in Specialized DSE.
+    -   Girls takes advantage in General DSE and boys on Specialized DSE.
 :::
+
+## Next steps {style="font-size: 60px;"}
+
+What factors could explain these differences between countries and genders in relation to digital self-efficacy?
 
 # Thank!
 
 -   **NUDOS website:** [www.nudos.cl](https://www.nudos.cl/)
 -   **GitHub proyect repository:** <https://github.com/milenio-nudos/ILSAs_batteries_measurement>
+
+# Appendices
+
+## 
+
+#### Invariance Analysis {.smaller}
+
+```{=html}
+
+<div style="
+  display: flex;
+  justify-content: center;
+  height: 80vh;
+  padding: 1em;
+">
+
+  <div style="
+    font-size: 65%;
+    line-height: 1.2;
+    max-height: 70vh;
+    overflow-y: auto;
+    text-align: center;
+  ">
+
+    <table style="margin: 0 auto;">
+  <caption>Cross-Country</caption>
+  <thead>
+<tr>
+  <th style="text-align: left;">Model</th>
+  <th style="text-align: right;">&chi;&sup2;</th>
+  <th style="text-align: right;">df</th>
+  <th style="text-align: right;">CFI</th>
+  <th style="text-align: right;">TLI</th>
+  <th style="text-align: right;">RMSEA</th>
+  <th style="text-align: right;">SRMR</th>
+  <th style="text-align: right;">&Delta;&chi;&sup2;</th>
+  <th style="text-align: right;">&Delta;df</th>
+  <th style="text-align: right;">&Delta;CFI</th>
+  <th style="text-align: right;">&Delta;RMSEA</th>
+  <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
+</tr>
+  </thead>
+  <tbody>
+<tr>
+  <td>Configural</td><td style="text-align: right;">15107.60</td><td style="text-align: right;">988</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.054</td><td style="text-align: right;">0.035</td><td colspan="5"></td>
+</tr>
+<tr>
+  <td>Metrical</td><td style="text-align: right;">18502.76</td><td style="text-align: right;">1294</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.052</td><td style="text-align: right;">0.037</td><td style="text-align: right;">3395.16</td><td style="text-align: right;">306</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
+</tr>
+<tr>
+  <td>Scalar</td><td style="text-align: right;">24944.79</td><td style="text-align: right;">2008</td><td style="text-align: right;">0.998</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.048</td><td style="text-align: right;">0.035</td><td style="text-align: right;">6442.03</td><td style="text-align: right;">714</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
+</tr>
+  </tbody>
+</table>
+
+    <br><br>
+
+    <table style="margin: 0 auto;">
+  <caption>By Gender</caption>
+  <thead>
+<tr>
+  <th style="text-align: left;">Model</th>
+  <th style="text-align: right;">&chi;&sup2;</th>
+  <th style="text-align: right;">df</th>
+  <th style="text-align: right;">CFI</th>
+  <th style="text-align: right;">TLI</th>
+  <th style="text-align: right;">RMSEA</th>
+  <th style="text-align: right;">SRMR</th>
+  <th style="text-align: right;">&Delta;&chi;&sup2;</th>
+  <th style="text-align: right;">&Delta;df</th>
+  <th style="text-align: right;">&Delta;CFI</th>
+  <th style="text-align: right;">&Delta;RMSEA</th>
+  <th style="text-align: right;">p-value (&Delta;&chi;&sup2;)</th>
+</tr>
+  </thead>
+  <tbody>
+<tr>
+  <td>Configural</td><td style="text-align: right;">10154.70</td><td style="text-align: right;">38</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.046</td><td style="text-align: right;">0.029</td><td colspan="5"></td>
+</tr>
+<tr>
+  <td>Metrical</td><td style="text-align: right;">10796.98</td><td style="text-align: right;">44</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.044</td><td style="text-align: right;">0.029</td><td style="text-align: right;">642.28</td><td style="text-align: right;">6</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.002</td><td style="text-align: right;">0</td>
+</tr>
+<tr>
+  <td>Scalar</td><td style="text-align: right;">11634.72</td><td style="text-align: right;">58</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.999</td><td style="text-align: right;">0.040</td><td style="text-align: right;">0.029</td><td style="text-align: right;">837.74</td><td style="text-align: right;">14</td><td style="text-align: right;">0</td><td style="text-align: right;">-0.004</td><td style="text-align: right;">0</td>
+</tr>
+  </tbody>
+</table>
+
+  </div>
+</div>
+```

@@ -27,7 +27,7 @@ cortest.bartlett(corMat, n = 393607)
 fac_pa <- fa(r = pisa_efa, nfactors = 3, fm= "pa")
 fac_pa
 
-# CFA
+# CFA pooled model
 
 model_cfa <- '
   gen_dse = ~ asses_info + share_info + pair_collab + how_to_share + 
@@ -70,11 +70,10 @@ multigroup_cfa <- '
 # Invariance across countries
 
 # Modelo configural
-fitgroup <- sem(model = multigroup_cfa, 
+fitgroup <- cfa(model = multigroup_cfa, 
                 data = pisa, 
                 group = "CNT",
                 ordered = TRUE
-              #  missing = "fiml" comentado ya que aumenta demasiado el tiempo
               )
 
 # demora 2 minutos
@@ -82,7 +81,7 @@ fitgroup <- sem(model = multigroup_cfa,
 
 # Modelo métrico (fijando las cargas)
 
-fitgroup_metric <- sem(model = multigroup_cfa, 
+fitgroup_metric <- cfa(model = multigroup_cfa, 
                        data = pisa, 
                        group = "CNT",
                        ordered = TRUE,
@@ -93,7 +92,7 @@ fitgroup_metric <- sem(model = multigroup_cfa,
 
 # Modelo escalar (fijando cargas y interceptos)
 
-fitgroup_scalar <- sem(model = multigroup_cfa, 
+fitgroup_scalar <- cfa(model = multigroup_cfa, 
                   data = pisa, 
                   group = "CNT",
                   ordered = TRUE,
@@ -170,7 +169,7 @@ save_kable(invariance_table_cnt, file = "output/graficos_y_tablas/tabla_invarian
 
 pisa$sex <- as.factor(pisa$sex)
 
-fitgroup_sx <- sem(model = multigroup_cfa, 
+fitgroup_sx <- cfa(model = multigroup_cfa, 
                 data = pisa, 
                 group = "sex",
                 ordered = TRUE
@@ -180,7 +179,7 @@ fitgroup_sx <- sem(model = multigroup_cfa,
               
 # Modelo métrico (fijando las cargas)
 
-fitgroup_metric_sx <- sem(model = multigroup_cfa, 
+fitgroup_metric_sx <- cfa(model = multigroup_cfa, 
                        data = pisa, 
                        group = "sex",
                        ordered = TRUE,
@@ -189,7 +188,7 @@ fitgroup_metric_sx <- sem(model = multigroup_cfa,
 
 # Modelo escalar (fijando cargas y interceptos)
 
-fitgroup_scalar_sx <- sem(model = multigroup_cfa, 
+fitgroup_scalar_sx <- cfa(model = multigroup_cfa, 
                   data = pisa, 
                   group = "sex",
                   ordered = TRUE,
@@ -336,7 +335,7 @@ plot_gen_dse <- ggplot(loadings_gen_dse,
 plot_gen_dse
 
 # Cleaveland autoeficacia especializada
-
+# Fijar el gráfico a x = .3
 plot_spec_dse <- ggplot(loadings_spec_dse,
                         aes(x = loading,
                             y = fct_reorder(item, loading, .fun = median, .desc = FALSE))) +
@@ -437,7 +436,7 @@ datatable(
   rownames = FALSE,
   caption = "Índices de Ajuste del Modelo (Interactiva)"
 )
-
+# Quitar decimales a 3
 table1::table1(~ . + -CNT,data=indices_ajuste)
 
 

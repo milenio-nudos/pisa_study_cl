@@ -2,6 +2,7 @@ pacman::p_load(dplyr, haven)
 options(scipen = 999) #Desactivar notación científica
 rm(list = ls())       #Limpieza enviroment
 
+# Para correr este código es necesario descargar el archivo STU_QQQ.sav en la carpeta input/raw_data
 pisa22 <- read_sav("input/raw_data/STU_QQQ.sav")
 
 #Filtrar países que hayan aplicado ICT y seleccionar variables de interes

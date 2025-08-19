@@ -30,8 +30,7 @@ This repository contains all the analyses and processing carried out by the NUDO
 
 - [ISA 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/isa2025/docs.html)
 - [Demosal 2025 presentation](https://milenio-nudos.github.io/pisa_study_cl/output/presentations/demosal_2025/docs.html)
-- [First visualization and analysis report](https://milenio-nudos.github.io/pisa_study_cl/output/reports/Analisis.html)
-- [Exploration analysis](https://milenio-nudos.github.io/pisa_study_cl/output/reports/NUDOS_PISA_explora.html)
+- [Exploration of gender gaps in digital self efficacy](https://milenio-nudos.github.io/pisa_study_cl/proc/03-gender-dif.html)
 
 
 
